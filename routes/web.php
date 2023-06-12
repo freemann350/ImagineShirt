@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TshirtController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +16,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::view('/detail','detail');
-Route::view('/shop','shop');
+Route::get('/shop',[TshirtController::class, 'index']);
 Route::view('/cart','cart');
 Route::view('/checkout','checkout');
