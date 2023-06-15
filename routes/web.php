@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\TshirtController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::view('/detail','detail');
-Route::get('/shop',[TshirtController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/tshirts',[TshirtController::class, 'index']);
+Route::get('/tshirts/detail/{id}',[TshirtController::class, 'show']);
 Route::view('/cart','cart');
 Route::view('/checkout','checkout');
