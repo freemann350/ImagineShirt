@@ -11,7 +11,10 @@ use Illuminate\Http\Request;
 
 class TshirtController extends Controller
 {
-
+    public function __construct()
+    {
+        //$this->authorizeResource(Tshirt::class, 'tshirt_images');
+    }
     public function index(): View
     {
         $allTshirt_images = Tshirt::all(); 
