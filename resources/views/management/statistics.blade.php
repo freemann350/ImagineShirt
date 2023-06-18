@@ -22,22 +22,54 @@
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-chart-area me-1"></i>
-                        Sale evolution per month
-                    </div>
-                    <div class="card-body"><canvas id="saleEvol" width="100%" height="40"></canvas></div>
-                </div>
-            </div>
-            <div class="col-xl-3"></div>
-            <div class="col-xl-6">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <i class="fas fa-chart-bar me-1"></i>
                         Sales per category (Last 12 mo.)
                     </div>
                     <div class="card-body"><canvas id="salesPerCat" width="100%" height="40"></canvas></div>
                 </div>
             </div>
-            <div class="col-xl-3"></div>
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-chart-bar me-1"></i>
+                        Today's sales
+                    </div>
+                    <div class="card-body">
+                        @if($todaySales->count() == 0)
+                        <p>No available data.</p>
+                        @else
+                        <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Name</th>
+                            <th>Total</th>
+                            <th>NIF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($todaySales as $sales)
+                        <tr>
+                            <td>{{$sales->status}}</td>
+                            <td>{{$sales->name}}</td>
+                            <td>{{$sales->total_price}}</td>
+                            <td>{{$sales->nif}}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Day total: {{$totalToday[0]->total}}</th>
+                        <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="col-xl-6">{{$todaySales->withQueryString()->links()}}</div>
+                @endif
+                </div>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -59,7 +91,11 @@
             @endforeach    
         ],
         datasets: [{
-        label: 'Sales average',
+        label: 'Number of sales',
+        fill: true,
+        backgroundColor: 'lightgreen',
+        pointBorderWidth: 3,
+        pointHitRadius: 50,
         data: [
             @foreach ($salesEvo as $evol)
                 {{$evol->cnt}},
@@ -69,40 +105,50 @@
         }]
     },
     options: {
-        backgroundColor:['darkgreen'],
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        responsive: true,
         color:['green'],
         borderColor: ['green'],
         scales: {
-        y: {
-            beginAtZero: false
-        }
+            y: {
+                beginAtZero: false
+            }
         }
     }
     });
 
-    //LINE CHART FOR SALES EVOLUTION IN LAST 12 MONTHS
+    //BAR CHART FOR SALES EVOLUTION IN LAST 12 MONTHS
     const salesPerCat = document.getElementById('salesPerCat');
 
     new Chart(salesPerCat, {
-        type: 'doughnut',
+        type: 'bar',
         data: {
-        labels: [
-            @foreach ($salesPerCat as $salesCat)
-                '{{$salesCat->name}}',
-            @endforeach    
-        ],
-        datasets: [{
-        label: 'Sales average',
-        data: [
-            @foreach ($salesPerCat as $salesCat)
-                {{$salesCat->qty}},
-            @endforeach      
-        ],
-        hoverOffset: 4
-        }]
-    },
-    options: {
-    }
-});
+            labels: [
+                @foreach ($salesPerCat as $salesCat)
+                    '{{$salesCat->name}}',
+                @endforeach    
+            ],
+            datasets: [{
+            label: 'Total sold',
+            data: [
+                @foreach ($salesPerCat as $salesCat)
+                    {{$salesCat->qty}},
+                @endforeach      
+            ],
+            hoverOffset: 4
+            }]
+        },
+        options: {
+            plugins: {
+            legend: {
+                display: false
+            }
+        }
+        }
+    });
 </script>
 @endsection

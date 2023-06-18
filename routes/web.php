@@ -4,6 +4,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TshirtController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,8 +22,9 @@ Route::get('/tshirts/detail/{id}',[TshirtController::class, 'show'])->name('deta
 Route::view('/cart','cart');
 Route::view('/checkout','checkout');
 
-Route::get('/mgmt', [OrderController::class, 'index'])->name('mgmt-home');
-Route::get('/mgmt/statistics', [OrderController::class, 'statistic'])->name('statistics');
+Route::get('/mgmt', [UserController::class, 'index'])->name('mgmt-home');
+Route::get('/mgmt/statistics', [UserController::class, 'statistic'])->name('statistics');
 Route::get('/mgmt/pending-orders', [OrderController::class, 'showPending'])->name('pending');
 Route::get('/mgmt/order-history', [OrderController::class, 'showHistory'])->name('history');
-Route::get('/mgmt/users', [OrderController::class, 'showHistory'])->name('users');
+Route::get('/mgmt/users', [UserController::class, 'users'])->name('users');
+Route::get('/mgmt/users/edit', [UserController::class, 'usersEdit'])->name('usersEdit');
