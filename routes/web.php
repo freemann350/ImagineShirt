@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TshirtController;
 use Illuminate\Support\Facades\Route;
@@ -15,20 +16,29 @@ use App\Http\Controllers\UserController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+//PUBLIC ROUTES
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'index')->name('home');
+    Route::get('/tshirts','catalog')->name('catalog');
+    Route::get('/tshirts/detail/{id}','show')->name('detail');
+});
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/tshirts',[TshirtController::class, 'index'])->name('catalog');
-Route::get('/tshirts/detail/{id}',[TshirtController::class, 'show'])->name('detail');
+
 Route::view('/cart','cart');
 Route::view('/checkout','checkout');
 
-Route::get('/mgmt', [UserController::class, 'index'])->name('mgmt-home');
-Route::get('/mgmt/statistics', [UserController::class, 'statistic'])->name('statistics');
-Route::get('/mgmt/pending-orders', [OrderController::class, 'showPending'])->name('pending');
-Route::get('/mgmt/order-history', [OrderController::class, 'showHistory'])->name('history');
-Route::get('/mgmt/order/view/{id}', [OrderController::class, 'show'])->name('orderShow');
+//ORDERS ROUTES
+Route::controller(OrderController::class)->group(function () {
+    Route::get('/mgmt/pending-orders/', 'showPending')->name('orders.pending');
+    Route::get('/mgmt/order-history/', 'showHistory')->name('orders.history');
+    Route::get('/mgmt/order/view/{id}', 'show')->name('orders.show');
+});
 
-Route::get('/mgmt/users', [UserController::class, 'users'])->name('users');
-
-Route::get('/mgmt/users/{id}/edit', [UserController::class, 'userEdit'])->name('userEdit');
-Route::put('/mgmt/users/{id}', [UserController::class, 'update'])->name('user.update');
+//ADMINISTRATION ROUTES
+Route::controller(AdminController::class)->group(function () {
+    Route::get('/mgmt', 'index')->name('mgmt.home');
+    Route::get('/mgmt/statistics', 'statistic')->name('statistics');
+    Route::get('/mgmt/users', 'users')->name('users');
+    Route::get('/mgmt/users/{id}/edit', 'userEdit')->name('users.edit');
+    Route::put('/mgmt/users/{id}', 'update')->name('users.update');
+});

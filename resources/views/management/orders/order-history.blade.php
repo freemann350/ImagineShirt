@@ -8,6 +8,16 @@
             <li class="breadcrumb-item">Orders</li>
             <li class="breadcrumb-item active">Order History</li>
         </ol>
+        
+        @include('management.orders.shared.filtros',[
+            'routeName' => "orders.history",
+            'filterByStatus' => old('status',$filterByStatus),
+            'filterByName' => old('name',$filterByName),
+            'filterByDateStart' => old('datestart',$filterByDateStart),
+            'filterByDateEnd' => old('dateend',$filterByDateEnd),
+            'filterByDateNIF' => old('nif',$filterByNIF)
+        ])
+
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
@@ -36,7 +46,7 @@
                             <td>{{$history->date}}</td>
                             <td>{{$history->total_price}}</td>
                             <td>{{$history->nif}}</td>
-                            <td><a href="{{route ('orderShow',$history->id)}}"><i title="View all info regarding order #{{$history->id}}" class="fa-solid fa-file-lines"></i></a></td>
+                            <td><a href="{{route ('orders.show',$history->id)}}"><i title="View all info regarding order #{{$history->id}}" class="fa-solid fa-file-lines"></i></a></td>
                         </tr>
                         @endforeach
                     </tbody>

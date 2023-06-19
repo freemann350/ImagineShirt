@@ -35,7 +35,7 @@
                             <td>{{$user->email}}</td>
                             <td>{{$user->user_type}}</td>
                             <td>{{$user->blocked == 0 ? "Active" : "Inactive"}}</td>
-                            <td><a href="{{route('userEdit',$user->id)}}"><i title="Edit {{ $user->name }} data" class="fa-solid fa-pencil"></i></a></td>
+                            <td><a href="{{route('users.edit',$user->id)}}"><i title="Edit {{ $user->name }} data" class="fa-solid fa-pencil"></i></a></td>
                         </tr>
                         @endforeach
                     </tbody>

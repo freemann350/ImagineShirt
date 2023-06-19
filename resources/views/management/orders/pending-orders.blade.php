@@ -8,6 +8,12 @@
             <li class="breadcrumb-item">Orders</li>
             <li class="breadcrumb-item active">Pending orders</li>
         </ol>
+
+        @include('management.orders.shared.filtros',[
+            'routeName' => "orders.pending",
+            'status' => old('status')
+        ])
+        
         <div class="card mb-4">
             <br>
             <div class="card-header">

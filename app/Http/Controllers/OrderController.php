@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -53,21 +54,27 @@ class OrderController extends Controller
             $historyQuery->where('status',$filterByStatus);
         }
 
-        if ($filterByName != '') {
-            $historyQuery->where('name',$filterByName);
+        if ($filterByName !== '') {
+            $userIds = User::where('name', 'like', "%$filterByName%")->pluck('id');
+            $historyQuery->whereIntegerInRaw('customer_id', $userIds);
         }
 
-        if ($filterByDateStart != '' &&  $filterByDateEnd != '') {
-            $historyQuery->where('date',$filterByStatus);
+        if ($filterByDateStart != '') {
+            if (!isset($request->endDate)){
+                 $filterByDateEnd = date('Y-m-d');
+            }
+
+            $historyQuery->whereBetween('date',[$filterByDateStart,$filterByDateEnd]);
+
         }
 
         if ($filterByNIF != '') {
-            $historyQuery->where('nif',$filterByNIF);
+            $historyQuery->where('nif','like',"%$filterByNIF%");
         }
         
         $orderHistory = $historyQuery->paginate(20);
 
-        return view('management.orders.order-history',compact('orderHistory'));
+        return view('management.orders.order-history',compact('orderHistory','filterByStatus','filterByName','filterByDateStart','filterByDateEnd','filterByNIF'));
     }
 
 }

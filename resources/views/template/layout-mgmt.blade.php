@@ -60,8 +60,8 @@
                             </a>
                             <div class="collapse" id="collapseSales" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link {{ Route::currentRouteName() == 'pending' ? 'active' : '' }}" href="{{ route('pending') }}">Pending orders</a>
-                                    <a class="nav-link {{ Route::currentRouteName() == 'history' ? 'active' : '' }}" href="{{ route('history') }}">Order history</a>
+                                    <a class="nav-link {{ Route::currentRouteName() == 'pending' ? 'active' : '' }}" href="{{ route('orders.pending') }}">Pending orders</a>
+                                    <a class="nav-link {{ Route::currentRouteName() == 'history' ? 'active' : '' }}" href="{{ route('orders.history') }}">Order history</a>
                                 </nav>
                             </div>
                         </div>
