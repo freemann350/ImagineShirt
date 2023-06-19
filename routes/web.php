@@ -26,5 +26,9 @@ Route::get('/mgmt', [UserController::class, 'index'])->name('mgmt-home');
 Route::get('/mgmt/statistics', [UserController::class, 'statistic'])->name('statistics');
 Route::get('/mgmt/pending-orders', [OrderController::class, 'showPending'])->name('pending');
 Route::get('/mgmt/order-history', [OrderController::class, 'showHistory'])->name('history');
+Route::get('/mgmt/order/view/{id}', [OrderController::class, 'show'])->name('orderShow');
+
 Route::get('/mgmt/users', [UserController::class, 'users'])->name('users');
-Route::get('/mgmt/users/edit', [UserController::class, 'usersEdit'])->name('usersEdit');
+
+Route::get('/mgmt/users/{id}/edit', [UserController::class, 'userEdit'])->name('userEdit');
+Route::put('/mgmt/users/{id}', [UserController::class, 'update'])->name('user.update');

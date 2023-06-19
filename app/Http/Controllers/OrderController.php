@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -17,8 +18,25 @@ class OrderController extends Controller
     {
         $queryPending = Order::query(); 
         $queryPending->where('status','pending');
-        $orderPending = $queryPending->paginate(10);
-        return view('management.pending-orders')->with('orderPending', $orderPending);
+        $orderPending = $queryPending->paginate(20);
+        return view('management.orders.pending-orders')->with('orderPending', $orderPending);
+    }
+
+    public function show($id): View
+    {
+        $orderQuery = Order::findOrFail($id); 
+
+        $orderItemQuery = OrderItem::where('order_id',$id)->paginate(20); 
+
+        return view('management.orders.show')->with([
+            'name'=>$orderQuery->user->name,
+            'address'=>$orderQuery->address,
+            'id'=>$orderQuery->id,
+            'date'=>$orderQuery->date,
+            'status'=>$orderQuery->status,
+            'total'=>$orderQuery->total_price,
+            'orderItems'=>$orderItemQuery
+        ]);
     }
 
     public function showHistory(Request $request): View
@@ -47,9 +65,9 @@ class OrderController extends Controller
             $historyQuery->where('nif',$filterByNIF);
         }
         
-        $history = $historyQuery->paginate(10);
+        $orderHistory = $historyQuery->paginate(20);
 
-        return view('management.order-history')->with('orderHistory', $history);
+        return view('management.orders.order-history',compact('orderHistory'));
     }
 
 }

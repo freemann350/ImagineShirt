@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UserController extends Controller
 {
@@ -17,19 +19,42 @@ class UserController extends Controller
 
     public function users(Request $request): View
     {
-        $users = User::query()->paginate(10); 
+        $users = User::query()->paginate(20); 
         return view('management.users.index')->with('users', $users);
     }
 
-    public function usersEdit(Request $request): View
+    public function userEdit($id): View
     {
-        $users = User::query()->paginate(10); 
-        return view('management.users.edit')->with('users', $users);
+        $users = User::findOrFail($id); 
+        
+        return view('management.users.edit')->with(['user'=> $users]);
+    }
+
+    public function update(UserRequest $request, $id): RedirectResponse
+    {
+        $user = User::findOrFail($id);
+
+        $formData = $request->validated();
+
+        $user = DB::transaction(function () use ($formData, $user) {
+            $user->name = $formData['name'];
+            $user->user_type = $formData['user_type'];
+            $user->email = $formData['email'];
+            $user->blocked = $formData['blocked'];
+            if (isset($formData['password'])) {
+                $user->password = $formData['password'];
+            }
+            
+            $user->update();
+            return $user;
+        });
+            
+        return redirect()->route('users');
     }
 
     public function statistic(): View
     {
-        $querySalesEvo = DB::select('
+        $salesEvo = DB::select('
             SELECT MONTHNAME(date) AS mnt, COUNT(id) AS cnt
             FROM orders
             WHERE status = "closed" AND date>now()  - INTERVAL 12 month 
@@ -37,7 +62,7 @@ class UserController extends Controller
             ORDER BY date;
         ');
 
-        $querySalesPerCat = DB::select('
+        $salesPerCat = DB::select('
             SELECT categories.name as name, sum(qty) as qty
             FROM order_items
             INNER JOIN tshirt_images ON tshirt_images.id = order_items.tshirt_image_id
@@ -48,15 +73,8 @@ class UserController extends Controller
             ORDER BY categories.name;
         ');
 
-        /*$queryTodaySales = DB::select('
-            SELECT ,, ,
-            FROM orders
-            INNER JOIN users ON users.id = orders.customer_id
-            WHERE date=CURDATE();
-        ');*/
-
         $today = date('Y-m-d');
-        $queryTodaySales = DB::table('orders')
+        $todaySales = DB::table('orders')
         ->join('users', 'users.id', '=', 'orders.customer_id')
         ->select('status', 'name', 'total_price', 'nif')
         ->where('orders.date',$today)
@@ -69,7 +87,7 @@ class UserController extends Controller
             GROUP BY date
         ');
 
-        return view('management.statistics',['salesEvo'=>$querySalesEvo,'salesPerCat'=>$querySalesPerCat, 'todaySales'=>$queryTodaySales],['totalToday'=>$totalToday]);
+        return view('management.statistics',compact('salesEvo','salesPerCat','todaySales','totalToday'));
     }
 
 }

@@ -12,7 +12,7 @@
             <br>
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                Users
+                User list
             </div>
             <div class="card-body">
             @if($users->count() == 0)
@@ -24,6 +24,7 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Type</th>
+                            <th>State</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -33,14 +34,14 @@
                             <td>{{$user->name}}</td>
                             <td>{{$user->email}}</td>
                             <td>{{$user->user_type}}</td>
-                            <td><i class="fa-solid fa-pencil"></i> <i class="fa-solid fa-circle-xmark"></i></td>
+                            <td>{{$user->blocked == 0 ? "Active" : "Inactive"}}</td>
+                            <td><a href="{{route('userEdit',$user->id)}}"><i title="Edit {{ $user->name }} data" class="fa-solid fa-pencil"></i></a></td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
                 <div class="row">
                     <div class="col-xl-6">{{$users->withQueryString()->links()}}</div>
-                    <div class="col-xl-6"><p style="text-align:right">Limit:    10  20  30</p></div>
                 </div>
             @endif
             </div>
