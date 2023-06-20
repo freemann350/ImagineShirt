@@ -18,7 +18,7 @@ class Order extends Model
 
     public function user(): BelongsTo
     {
-        return $this->BelongsTo(User::class, 'customer_id', 'id');
+        return $this->BelongsTo(User::class, 'customer_id', 'id')->withTrashed();
     }
 
     public function orderItem(): HasMany
