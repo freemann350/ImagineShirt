@@ -37,7 +37,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link {{ Route::currentRouteName() == 'mgmt-home' ? 'active' : '' }}" href="{{ route('mgmt-home') }}">
+                            <a class="nav-link {{ Route::currentRouteName() == 'mgmt.home' ? 'active' : '' }}" href="{{ route('mgmt.home') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Main page
                             </a>
@@ -49,7 +49,7 @@
                             <div class="collapse" id="collapseAdm" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link {{ Route::currentRouteName() == 'statistics' ? 'active' : '' }}" href="{{ route('statistics') }}">Statistics</a>
-                                    <a class="nav-link {{ Route::currentRouteName() == 'users' ? 'active' : '' }}" href="{{ route('users') }}">Users</a>
+                                    <a class="nav-link {{ Route::currentRouteName() == 'users.index' ? 'active' : '' }}" href="{{ route('users.index') }}">Users</a>
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Sales</div>
@@ -60,8 +60,8 @@
                             </a>
                             <div class="collapse" id="collapseSales" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link {{ Route::currentRouteName() == 'pending' ? 'active' : '' }}" href="{{ route('orders.pending') }}">Pending orders</a>
-                                    <a class="nav-link {{ Route::currentRouteName() == 'history' ? 'active' : '' }}" href="{{ route('orders.history') }}">Order history</a>
+                                    <a class="nav-link {{ Route::currentRouteName() == 'orders.pending' ? 'active' : '' }}" href="{{ route('orders.pending') }}">Pending orders</a>
+                                    <a class="nav-link {{ Route::currentRouteName() == 'orders.history' ? 'active' : '' }}" href="{{ route('orders.history') }}">Order history</a>
                                 </nav>
                             </div>
                         </div>

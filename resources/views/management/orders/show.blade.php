@@ -27,7 +27,7 @@
                         </div>
                         <div class="col-md-3">
                             <h5><u>NIF</u></h5>
-                            <p class="form-control-static">{{$name}}</p>
+                            <p class="form-control-static">{{$nif}}</p>
                         </div>
                     </div>
                     <hr>

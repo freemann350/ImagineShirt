@@ -11,11 +11,14 @@
 
         @include('management.orders.shared.filtros',[
             'routeName' => "orders.pending",
-            'status' => old('status')
+            'filterByStatus' => old('status',$filterByStatus),
+            'filterByName' => old('name',$filterByName),
+            'filterByDateStart' => old('datestart',$filterByDateStart),
+            'filterByDateEnd' => old('dateend',$filterByDateEnd),
+            'filterByDateNIF' => old('nif',$filterByNIF)
         ])
         
         <div class="card mb-4">
-            <br>
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
                 Pending orders
@@ -39,7 +42,7 @@
                             <td>{{$order->date}}</td>
                             <td>{{$order->user->name}}</td>
                             <td>{{$order->total_price}}</td>
-                            <td>$320,800</td>
+                            <td><a href="{{route ('orders.show',$order->id)}}"><i title="View all info regarding order #{{$order->id}}" class="fa-solid fa-file-lines"></i></a></td>
                         </tr>
                         @endforeach
                     </tbody>

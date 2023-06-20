@@ -11,12 +11,17 @@ class Order extends Model
 {
     use HasFactory;
 
+    public function customer(): BelongsTo
+    {
+        return $this->BelongsTo(Customer::class, 'customer_id', 'id');
+    }
+
     public function user(): BelongsTo
     {
         return $this->BelongsTo(User::class, 'customer_id', 'id');
     }
 
-    public function orderitem(): HasMany
+    public function orderItem(): HasMany
     {
         return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }    

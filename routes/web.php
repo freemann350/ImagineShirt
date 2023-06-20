@@ -36,9 +36,10 @@ Route::controller(OrderController::class)->group(function () {
 
 //ADMINISTRATION ROUTES
 Route::controller(AdminController::class)->group(function () {
-    Route::get('/mgmt', 'index')->name('mgmt.home');
+    Route::get('/mgmt', 'home')->name('mgmt.home');
     Route::get('/mgmt/statistics', 'statistic')->name('statistics');
-    Route::get('/mgmt/users', 'users')->name('users');
-    Route::get('/mgmt/users/{id}/edit', 'userEdit')->name('users.edit');
-    Route::put('/mgmt/users/{id}', 'update')->name('users.update');
+    //Route::get('/mgmt/users', 'users')->name('users');
+    //Route::get('/mgmt/users/{id}/edit', 'userEdit')->name('users.edit');
+    //Route::put('/mgmt/users/{id}', 'update')->name('users.update');
+    Route::resource('/mgmt/users',AdminController::class);
 });

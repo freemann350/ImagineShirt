@@ -24,9 +24,13 @@ class UserRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'email' => ['required','email',Rule::unique('users','email')->ignore($this->id)],
-            'user_type' => 'required|in:A,E,C',
-            'password' => 'sometimes',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users','email')->ignore($this->user_id)
+            ],
+            'user_type' => 'required|in:A,E',
+            'password' => Rule::requiredIf(!isset($this->user_id)),
             'blocked' => 'required|boolean',
         ];
     }
@@ -38,6 +42,9 @@ class UserRequest extends FormRequest
             'email.required' => 'Email is required',
             'email.email' => 'Invalid email format',
             'email.unique' => 'Email already in use',
+            'password.required' => 'Password cannot be empty',
+            'user_type.required' => 'User type is required',
+            'user_type.in' => 'User type must be Administrator or Employee',
             'blocked.required' => 'Blocked is required',
             'blocked.boolean' => 'Blocked must be boolean',
             ];

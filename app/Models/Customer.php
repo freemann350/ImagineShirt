@@ -6,18 +6,19 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Customer extends Model
 {
     use HasFactory;
 
-    public function user(): BelongsTo
+    public function userRef(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function orderRef(): BelongsTo
+    public function order(): HasMany
     {
-        return $this->belongsTo(Order::class, 'id', 'customer_id');
+        return $this->hasMany(Order::class, 'id', 'customer_id');
     }
 }

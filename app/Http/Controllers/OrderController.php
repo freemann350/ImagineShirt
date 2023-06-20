@@ -17,27 +17,40 @@ class OrderController extends Controller
 
     public function showPending(Request $request): View
     {
-        $queryPending = Order::query(); 
-        $queryPending->where('status','pending');
-        $orderPending = $queryPending->paginate(20);
-        return view('management.orders.pending-orders')->with('orderPending', $orderPending);
-    }
+        $filterByStatus = $request->status ?? '';
+        $filterByName = $request->name ?? '';
+        $filterByDateStart = $request->startDate ?? '';
+        $filterByDateEnd = $request->endDate ?? '';
+        $filterByNIF = $request->nif ?? '';
 
-    public function show($id): View
-    {
-        $orderQuery = Order::findOrFail($id); 
+        $pendingQuery = Order::query(); 
 
-        $orderItemQuery = OrderItem::where('order_id',$id)->paginate(20); 
+        if ($filterByStatus != '') {
+            $pendingQuery->where('status',$filterByStatus);
+        }
 
-        return view('management.orders.show')->with([
-            'name'=>$orderQuery->user->name,
-            'address'=>$orderQuery->address,
-            'id'=>$orderQuery->id,
-            'date'=>$orderQuery->date,
-            'status'=>$orderQuery->status,
-            'total'=>$orderQuery->total_price,
-            'orderItems'=>$orderItemQuery
-        ]);
+        if ($filterByName !== '') {
+            $userIds = User::where('name', 'like', "%$filterByName%")->pluck('id');
+            $pendingQuery->whereIntegerInRaw('customer_id', $userIds);
+        }
+
+        if ($filterByDateStart != '') {
+            if (!isset($request->endDate)){
+                 $filterByDateEnd = date('Y-m-d');
+            }
+
+            $pendingQuery->whereBetween('date',[$filterByDateStart,$filterByDateEnd]);
+
+        }
+
+        if ($filterByNIF != '') {
+            $pendingQuery->where('nif','like',"%$filterByNIF%");
+        }
+
+        $pendingQuery->where('status','pending');
+        $orderPending = $pendingQuery->paginate(20);
+        
+        return view('management.orders.pending-orders',compact('orderPending','filterByStatus','filterByName','filterByDateStart','filterByDateEnd','filterByNIF'));
     }
 
     public function showHistory(Request $request): View
@@ -71,10 +84,27 @@ class OrderController extends Controller
         if ($filterByNIF != '') {
             $historyQuery->where('nif','like',"%$filterByNIF%");
         }
-        
+
         $orderHistory = $historyQuery->paginate(20);
 
         return view('management.orders.order-history',compact('orderHistory','filterByStatus','filterByName','filterByDateStart','filterByDateEnd','filterByNIF'));
     }
 
+    public function show($id): View
+    {
+        $orderQuery = Order::findOrFail($id); 
+
+        $orderItemQuery = OrderItem::where('order_id',$id)->paginate(20); 
+
+        return view('management.orders.show')->with([
+            'name'=>$orderQuery->user->name,
+            'address'=>$orderQuery->address,
+            'nif'=>$orderQuery->nif,
+            'id'=>$orderQuery->id,
+            'date'=>$orderQuery->date,
+            'status'=>$orderQuery->status,
+            'total'=>$orderQuery->total_price,
+            'orderItems'=>$orderItemQuery
+        ]);
+    }
 }

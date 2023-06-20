@@ -8,6 +8,15 @@
             <li class="breadcrumb-item">Administration</li>
             <li class="breadcrumb-item active">Users</li>
         </ol>
+
+        @if (session('alert-msg'))
+        <div class="col">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">{!! session('alert-msg') !!}</div>
+            </div>
+        </div> 
+        @endif
+        
         <div class="card mb-4">
             <br>
             <div class="card-header">
@@ -15,6 +24,8 @@
                 User list
             </div>
             <div class="card-body">
+            <a class="btn btn-success" href="{{ route('users.create') }}"><i class="fas fa-plus"></i> &nbsp;New user</a>
+
             @if($users->count() == 0)
                 <p>No available data.</p>
             @else
@@ -41,7 +52,9 @@
                     </tbody>
                 </table>
                 <div class="row">
-                    <div class="col-xl-6">{{$users->withQueryString()->links()}}</div>
+                    <div class="col-xl-6">
+                        {{$users->withQueryString()->links()}}
+                    </div>
                 </div>
             @endif
             </div>

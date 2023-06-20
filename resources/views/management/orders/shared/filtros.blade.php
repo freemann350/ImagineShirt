@@ -9,22 +9,26 @@
             <div class="row">
                 <div class="col">
                     <label>Status</label>
-                    <select class="form-control  @error('status') is-invalid @enderror" name="status">
+                    <select class="form-control" name="status">
                         <option selected hidden value="">Select an order state</option>
                         <option {{$filterByStatus == "pending" ? 'selected' : ''}} value="pending">Pending</option>
                         <option {{$filterByStatus == "paid" ? 'selected' : '' }} value="paid">Paid</option>
+                        @if ($routeName == 'orders.history')
                         <option {{$filterByStatus == "closed" ? 'selected' : '' }} value="closed">Closed</option>
                         <option {{$filterByStatus == "canceled" ? 'selected' : '' }} value="canceled">Canceled</option>
+                        @endif
                     </select>
                 </div>
                 <div class="col">
                     <label>Customer name</label>
                     <input type="text" class="form-control" placeholder="Customer name" name="name" value="{{$filterByName}}">
                 </div>
+                @if ($routeName == 'orders.history')
                 <div class="col">
                     <label>NIF</label>
                     <input type="text" class="form-control" placeholder="Customer name" name="nif" value="{{$filterByNIF}}">
                 </div>
+                @endif
             </div>
             <br>
 

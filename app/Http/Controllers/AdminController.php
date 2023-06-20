@@ -6,32 +6,61 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AdminController extends Controller
 {
-    public function index(): View
+    public function home(): View
     {
         return view('management.index');
     }
 
-    public function users(Request $request): View
+    public function index(Request $request): View
     {
         $users = User::query()->paginate(20); 
         return view('management.users.index')->with('users', $users);
     }
 
-    public function userEdit($id): View
+    public function edit($id): View
     {
         $users = User::findOrFail($id); 
         
         return view('management.users.edit')->with(['user'=> $users]);
     }
 
-    public function update(UserRequest $request, $id): RedirectResponse
+    public function create() : View{
+
+        return view('management.users.create');
+
+    }
+    public function store(UserRequest $request): RedirectResponse 
     {
-        $user = User::findOrFail($id);
+        $formData = $request->validated();
+
+        $user = DB::transaction(function () use ($formData, $request) {
+            $newUser = new User();
+
+            $newUser->name = $formData['name'];
+            $newUser->user_type = $formData['user_type'];
+            $newUser->email = $formData['email'];
+            $newUser->password = $formData['password'];
+            $newUser->password = Hash::make($formData['password']);
+            $newUser->save();
+
+            return $newUser;
+        });
+
+        $htmlMessage = "User <strong>\"{$user->name}\"</strong> succesfully created!";
+        return redirect()->route('users.index')
+        ->with('alert-msg', $htmlMessage)
+        ->with('alert-type', 'success');
+    }
+    
+    public function update(UserRequest $request, User $user): RedirectResponse
+    {
+        //$user = User::findOrFail($id);
 
         $formData = $request->validated();
 
@@ -41,14 +70,17 @@ class AdminController extends Controller
             $user->email = $formData['email'];
             $user->blocked = $formData['blocked'];
             if (isset($formData['password'])) {
-                $user->password = $formData['password'];
+                $user->password = Hash::make($formData['password']);
             }
             
             $user->update();
             return $user;
         });
             
-        return redirect()->route('users');
+        $htmlMessage = "User <strong>\"{$user->name}\"</strong> successfully updated!";
+
+        return redirect()->route('users.index')
+        ->with('alert-msg', $htmlMessage);
     }
 
     public function statistic(): View
@@ -88,4 +120,9 @@ class AdminController extends Controller
 
         return view('management.statistics',compact('salesEvo','salesPerCat','todaySales','totalToday'));
     }
+
+    /*public function destroy(UserRequest $request): RedirectResponse 
+    {
+
+    }*/
 }
