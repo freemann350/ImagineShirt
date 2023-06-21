@@ -50,16 +50,19 @@ class AdminController extends Controller
 
     public function edit($id): View
     {
-        $users = User::findOrFail($id); 
+        $user = User::findOrFail($id); 
         
-        return view('management.users.edit')->with(['user'=> $users]);
+        if ($user->user_type == "C") {
+            abort(404);
+        }
+    
+        return view('management.users.edit')->with(['user'=> $user]);
     }
 
     public function create() : View{
-
         return view('management.users.create');
-
     }
+    
     public function store(UserRequest $request): RedirectResponse 
     {
         $formData = $request->validated();
@@ -85,8 +88,6 @@ class AdminController extends Controller
     
     public function update(UserRequest $request, User $user): RedirectResponse
     {
-        //$user = User::findOrFail($id);
-
         $formData = $request->validated();
 
         $user = DB::transaction(function () use ($formData, $user) {
@@ -160,7 +161,10 @@ class AdminController extends Controller
 
     public function destroy(User $user): RedirectResponse 
     {
+       $htmlMessage = "User <strong>\"{$user->name}\"</strong> has been deleted!"; 
        $user->delete();
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')        
+        ->with('alert-msg', $htmlMessage)
+        ->with('alert-type','warning');
     }
 }

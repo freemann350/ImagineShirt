@@ -5,7 +5,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TshirtController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,12 +38,12 @@ Route::controller(OrderController::class)->group(function () {
 Route::controller(AdminController::class)->group(function () {
     Route::get('/mgmt', 'home')->name('mgmt.home');
     Route::get('/mgmt/statistics', 'statistic')->name('statistics');
-    Route::patch('/mgmt/users/{user}/blocked','changeBlock')->name('user.blocked.change');
+    Route::patch('/mgmt/users/{user}/blocked','changeBlock')->name('users.blocked.change');
     Route::delete('mgmt/users/{user}','destroy')->name('users.destroy');
     Route::resource('/mgmt/users',AdminController::class);
 });
 
-Route::controller(CategoriesController::class)->group(function () {
-    Route::delete('mgmt/categories/{category}','destroy')->name('category.destroy');
-    Route::resource('/mgmt/users',AdminController::class);
+Route::controller(CategoryController::class)->group(function () {
+    Route::delete('/mgmt/categories/{category}','destroy')->name('category.destroy');
+    Route::resource('/mgmt/categories',CategoryController::class);
 });

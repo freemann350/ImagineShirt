@@ -106,18 +106,20 @@
                             </td>
                             <td>{{$user->blocked == 0 ? "Unblocked" : "Blocked"}}</td>
                             <td>
+                                @if ($user->user_type != "C") 
                                 <a href="{{route('users.edit',$user->id)}}">
                                     <button style="color:blue" class="btn"> <i title="Edit {{ $user->name }} data" class="fa-solid fa-pencil"></i></button>
                                 </a>
+                                @endif
                                 @if($user->blocked == 0 )
-                                    <form action="{{ route('user.blocked.change', $user) }}" method="POST">
+                                    <form action="{{ route('users.blocked.change', $user) }}" method="POST">
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="blocked" value="1">
                                         <button style="color:gold" title="Block {{ $user->name }}" type="submit" class="btn"><i class="fa-solid fa-lock"></i></button>
                                     </form>
                                 @else
-                                    <form action="{{ route('user.blocked.change', $user) }}" method="POST">
+                                    <form action="{{ route('users.blocked.change', $user) }}" method="POST">
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="blocked" value="0">

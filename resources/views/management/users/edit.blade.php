@@ -79,7 +79,7 @@
                     <div class="col-md-2">
                         <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> &nbsp;Save</button>
                     </div>
-
+                </form>
                     <div class="col-md-2">
                         <form method="POST" action="{{ route('users.destroy',$user) }}">
                             @csrf
@@ -88,8 +88,6 @@
                         </form>
                     </div>
                 </div>
-
-            </form>
         </div>
     </div>
 </main>
