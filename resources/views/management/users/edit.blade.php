@@ -62,10 +62,10 @@
                 <br>
                 <div class="row">
                     <div class="col-md-9">
-                        <input type="hidden" name="blocked" value="1">
-                        <input class="form-check-input @error('blocked') is-invalid @enderror" type="checkbox" name="blocked" id="gridCheck" value="0"  {{$user->blocked == 0 ? 'checked' : ''}}> 
+                        <input type="hidden" name="blocked" value="0">
+                        <input class="form-check-input @error('blocked') is-invalid @enderror" type="checkbox" name="blocked" id="gridCheck" value="1"  {{$user->blocked == 1 ? 'checked' : ''}}> 
                         <label class="form-check-label">
-                            Active
+                            Blocked
                         </label>
                         @error('blocked')
                         <div class="invalid-feedback">
@@ -75,8 +75,19 @@
                     </div>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </form>
+                <div class="row">
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> &nbsp;Save</button>
+                    </div>
+                </form>
+                    <div class="col-md-2">
+                        <form method="POST" action="{{ route('users.destroy',$user) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger" type="submit"><i class="fas fa-xmark"></i> &nbsp;Delete user</button>
+                        </form>
+                    </div>
+                </div>
         </div>
     </div>
 </main>

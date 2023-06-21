@@ -3,11 +3,11 @@
 @section('main')
 <main>
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Edit user</h1>
+        <h1 class="mt-4">Create user</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item">Administration</li>
             <li class="breadcrumb-item"><a href="{{route('users.index')}}">Users</a></li>
-            <li class="breadcrumb-item active">Edit</li>
+            <li class="breadcrumb-item active">Add new user</li>
         </ol>
         <div class="card mb-4">
             <br>
@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col">
                         <label>Name</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" placeholder="First name" value="{{old('name')}}" name="name">
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Name" value="{{old('name')}}" name="name">
                         @error('name')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -46,7 +46,7 @@
                 <div class="row">
                     <div class="col">
                         <label>Email</label>
-                        <input type="text" class="form-control  @error('email') is-invalid @enderror" placeholder="Email" name="email" value="{{old('email')}}">
+                        <input type="email" class="form-control  @error('email') is-invalid @enderror" placeholder="Email" name="email" value="{{old('email')}}">
                         @error('email')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -55,7 +55,7 @@
                     </div>
                     <div class="col">
                         <label>Password</label>
-                        <input type="text" class="form-control @error('password') is-invalid @enderror" placeholder="Password" name="password">
+                        <input type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" name="password">
                         @error('password')
                         <div class="invalid-feedback">
                             {{ $message }}

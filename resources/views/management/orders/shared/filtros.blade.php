@@ -2,7 +2,7 @@
     <br>
     <div class="card-header">
         <i class="fas fa-filter me-1"></i>
-        Order Filters
+        Order filters
     </div>
     <div class="card-body">
         <form method="GET" action="{{route ($routeName)}}">
@@ -26,7 +26,7 @@
                 @if ($routeName == 'orders.history')
                 <div class="col">
                     <label>NIF</label>
-                    <input type="text" class="form-control" placeholder="Customer name" name="nif" value="{{$filterByNIF}}">
+                    <input type="text" class="form-control" placeholder="NIF" name="nif" value="{{$filterByNIF}}">
                 </div>
                 @endif
             </div>

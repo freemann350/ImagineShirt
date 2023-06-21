@@ -12,7 +12,7 @@ class Customer extends Model
 {
     use HasFactory;
 
-    public function userRef(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangeAdminRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Illuminate\Http\RedirectResponse;
+
 
 class AdminController extends Controller
 {
@@ -19,27 +21,54 @@ class AdminController extends Controller
 
     public function index(Request $request): View
     {
-        $users = User::query()->paginate(20); 
-        return view('management.users.index')->with('users', $users);
+        $filterByName = $request->name ?? '';
+        $filterByEmail = $request->email ?? '';
+        $filterByUserType = $request->user_type ?? '';
+        $filterByBlocked = $request->blocked ?? '';
+
+        $userQuery = User::query(); 
+
+        if ($filterByName != '') {
+            $userQuery->where('name','like',"%$filterByName%");
+        }
+
+        if ($filterByEmail !== '') {
+            $userQuery->where('email', $filterByEmail);
+        }
+
+        if ($filterByUserType != '') {
+            $userQuery->where('user_type',$filterByUserType);
+        }
+
+        if ($filterByBlocked != '') {
+            $userQuery->where('blocked',$filterByBlocked);
+        }
+
+        $users = $userQuery->paginate(20); 
+
+        return view('management.users.index',compact('users','filterByName','filterByEmail','filterByUserType','filterByBlocked'));
     }
 
     public function edit($id): View
     {
-        $users = User::findOrFail($id); 
+        $user = User::findOrFail($id); 
         
-        return view('management.users.edit')->with(['user'=> $users]);
+        if ($user->user_type == "C") {
+            abort(404);
+        }
+    
+        return view('management.users.edit')->with(['user'=> $user]);
     }
 
     public function create() : View{
-
         return view('management.users.create');
-
     }
+    
     public function store(UserRequest $request): RedirectResponse 
     {
         $formData = $request->validated();
 
-        $user = DB::transaction(function () use ($formData, $request) {
+        $user = DB::transaction(function () use ($formData) {
             $newUser = new User();
 
             $newUser->name = $formData['name'];
@@ -60,8 +89,6 @@ class AdminController extends Controller
     
     public function update(UserRequest $request, User $user): RedirectResponse
     {
-        //$user = User::findOrFail($id);
-
         $formData = $request->validated();
 
         $user = DB::transaction(function () use ($formData, $user) {
@@ -80,7 +107,8 @@ class AdminController extends Controller
         $htmlMessage = "User <strong>\"{$user->name}\"</strong> successfully updated!";
 
         return redirect()->route('users.index')
-        ->with('alert-msg', $htmlMessage);
+        ->with('alert-msg', $htmlMessage)
+        ->with('alert-type','success');
     }
 
     public function statistic(): View
@@ -121,8 +149,23 @@ class AdminController extends Controller
         return view('management.statistics',compact('salesEvo','salesPerCat','todaySales','totalToday'));
     }
 
-    /*public function destroy(UserRequest $request): RedirectResponse 
+    public function changeBlock(ChangeAdminRequest $request, User $user): RedirectResponse 
     {
+        $user->blocked = $request->validated()['blocked'];
+        $user->save();
+        $strMsg = $user->blocked ? '" is now blocked!' : '" is now unblocked!';
+        
+        return back()
+            ->with('alert-msg', 'User "' . $user->name . $strMsg)
+            ->with('alert-type', $user->blocked ? 'warning' : 'success');
+    }
 
-    }*/
+    public function destroy(User $user): RedirectResponse 
+    {
+       $htmlMessage = "User <strong>\"{$user->name}\"</strong> has been deleted!"; 
+       $user->delete();
+        return redirect()->route('users.index')        
+        ->with('alert-msg', $htmlMessage)
+        ->with('alert-type','warning');
+    }
 }
