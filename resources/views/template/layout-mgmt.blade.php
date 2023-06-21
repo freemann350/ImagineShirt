@@ -48,9 +48,11 @@
                             </a>
                             <div class="collapse" id="collapseAdm" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'tshirts.index' ? 'active' : '' }}" href="{{ route('tshirts.index') }}">Tshirts</a>
+                                    <a class="nav-link {{ Route::currentRouteName() == 'categories.index' ? 'active' : '' }}" href="{{ route('categories.index') }}">Categories</a>
+                                    <a class="nav-link {{ Route::currentRouteName() == 'colors.index' ? 'active' : '' }}" href="{{ route('colors.index') }}">Colors</a>
                                     <a class="nav-link {{ Route::currentRouteName() == 'statistics' ? 'active' : '' }}" href="{{ route('statistics') }}">Statistics</a>
                                     <a class="nav-link {{ Route::currentRouteName() == 'users.index' ? 'active' : '' }}" href="{{ route('users.index') }}">Users</a>
-                                    <a class="nav-link {{ Route::currentRouteName() == 'categories.index' ? 'active' : '' }}" href="{{ route('categories.index') }}">Categories</a>
                                 </nav>
                             </div>
                             

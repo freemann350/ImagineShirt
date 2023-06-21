@@ -3,20 +3,20 @@
 @section('main')
 <main>
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Create category</h1>
+        <h1 class="mt-4">Create user</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item">Administration</li>
-            <li class="breadcrumb-item"><a href="{{route('categories.index')}}">Categories</a></li>
-            <li class="breadcrumb-item active">Add new category</li>
+            <li class="breadcrumb-item"><a href="{{route('tshirts.index')}}">Tshirts</a></li>
+            <li class="breadcrumb-item active">Add new tshirt</li>
         </ol>
         <div class="card mb-4">
             <br>
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                Add new category
+                Add new tshirt
             </div>
             <div class="card-body">
-            <form method="POST" action="{{route('categories.store')}}">
+            <form method="POST" action="{{route('tshirts.store')}}">
                 @csrf
                 <div class="row">
                     <div class="col">

@@ -58,7 +58,7 @@
                         <select class="custom-select">
                             <option selected hidden>Choose a color...</option>
                             @foreach ($colors as $color)
-                            <option value="{{$color->id}}">{{$color->name}}</option>
+                            <option value="{{$color->code}}">{{$color->name}}</option>
                             @endforeach
                         </select>
                     </form>
