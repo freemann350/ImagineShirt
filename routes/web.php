@@ -5,7 +5,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TshirtController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ColorController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -45,3 +46,25 @@ Route::controller(AdminController::class)->group(function () {
     Route::delete('mgmt/users/{user}','destroy')->name('users.destroy');
     Route::resource('/mgmt/users',AdminController::class);
 });
+
+//CATEGORIES ROUTES
+Route::controller(CategoryController::class)->group(function () {
+    Route::delete('/mgmt/categories/{category}','destroy')->name('categories.destroy');
+    Route::resource('/mgmt/categories',CategoryController::class);
+});
+
+//TSHIRTS ROUTES
+Route::controller(TshirtController::class)->group(function () {
+    Route::delete('/mgmt/tshirts/{tshirt}','destroy')->name('tshirts.destroy');
+    Route::get('/mgmt/tshirts/file/{file}','getPrivateFile')->name('tshirts.get.image'); //GET FOR PRIVATE IMAGES
+    Route::resource('/mgmt/tshirts',TshirtController::class);
+});
+
+//COLOR ROUTES
+Route::controller(ColorController::class)->group(function () {
+    Route::delete('/mgmt/colors/{color}','destroy')->name('colors.destroy');
+    Route::resource('/mgmt/colors',ColorController::class);
+});
+
+Auth::routes();
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
