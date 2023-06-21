@@ -15,7 +15,8 @@
                 Edit <i>{{$tshirt->name}}</i>
             </div>
             <div class="card-body">
-            <form method="POST" action="{{ route('tshirts.update', $tshirt) }}">
+            <form method="POST" action="{{ route('tshirts.update', $tshirt) }}" enctype="multipart/form-data">
+            <input type="hidden" name="tshirt_id" value="{{ $tshirt->id }}">
                 @csrf
                 @method('PUT')
                 <div class="row">
@@ -40,6 +41,25 @@
                             {{ $message }}
                         </div>
                         @enderror
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Tshirt picture</label>
+                        <br>
+                        <img src="{{ $tshirt->fullTshirtImageUrl }}" class="img-thumbnail"></img>
+                        <br>
+                        <input type="file" class="form-control @error('tshirt_image') is-invalid @enderror"  name="tshirt_image">
+                        @error('tshirt_image')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="col">
+                        <label>Description</label>
+                        <textarea class="form-control" name="description">{{$tshirt->description}}</textarea>
                     </div>
                 </div>
                 <br>

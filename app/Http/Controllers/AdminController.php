@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -68,7 +69,7 @@ class AdminController extends Controller
     {
         $formData = $request->validated();
 
-        $user = DB::transaction(function () use ($formData) {
+        $user = DB::transaction(function () use ($formData,$request) {
             $newUser = new User();
 
             $newUser->name = $formData['name'];
@@ -76,6 +77,13 @@ class AdminController extends Controller
             $newUser->email = $formData['email'];
             $newUser->password = $formData['password'];
             $newUser->password = Hash::make($formData['password']);
+
+            if ($request->hasFile('photo')) {
+                $path = $request->photo->store('public/photos');
+                $newUser->photo_url = basename($path);
+                $newUser->save();
+            }
+
             $newUser->save();
 
             return $newUser;
@@ -91,7 +99,7 @@ class AdminController extends Controller
     {
         $formData = $request->validated();
 
-        $user = DB::transaction(function () use ($formData, $user) {
+        $user = DB::transaction(function () use ($formData, $user, $request) {
             $user->name = $formData['name'];
             $user->user_type = $formData['user_type'];
             $user->email = $formData['email'];
@@ -100,7 +108,18 @@ class AdminController extends Controller
                 $user->password = Hash::make($formData['password']);
             }
             
-            $user->update();
+            $user->save();
+            
+            if ($request->hasFile('photo')) {
+                if ($user->photo_url) {
+                    Storage::delete('public/photos/' . $user->photo_url);
+                }
+                
+                $path = $request->photo->store('public/photos');
+                $user->photo_url = basename($path);
+                $user->save();
+            }
+
             return $user;
         });
             
@@ -164,6 +183,7 @@ class AdminController extends Controller
     {
        $htmlMessage = "User <strong>\"{$user->name}\"</strong> has been deleted!"; 
        $user->delete();
+       
         return redirect()->route('users.index')        
         ->with('alert-msg', $htmlMessage)
         ->with('alert-type','warning');

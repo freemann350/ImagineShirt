@@ -8,6 +8,7 @@ use App\Models\Tshirt;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class TshirtController extends Controller
@@ -35,17 +36,23 @@ class TshirtController extends Controller
     }
 
     public function create() : View{
-        return view('management.tshirts.create');
+        $categories = Category::all();
+
+        return view('management.tshirts.create',compact('categories'));
     }
 
-    public function store(TshirtController $request): RedirectResponse 
+    public function store(TshirtRequest $request): RedirectResponse 
     {
         $formData = $request->validated();
 
-        $tshirt = DB::transaction(function () use ($formData) {
+        $tshirt = DB::transaction(function () use ($formData, $request) {
             $newTshirt = new Tshirt();
 
             $newTshirt->name = $formData['name'];
+            $newTshirt->category_id = $formData['category'];
+            $newTshirt->description = $formData['description'];
+            $path = $request->tshirt_image->store('public/tshirt_images');
+            $newTshirt->image_url = basename($path);
             $newTshirt->save();
 
             return $newTshirt;
@@ -72,11 +79,23 @@ class TshirtController extends Controller
     {
         $formData = $request->validated();
 
-        $tshirt = DB::transaction(function () use ($formData, $tshirt) {
+        $tshirt = DB::transaction(function () use ($formData, $tshirt, $request) {
             $tshirt->name = $formData['name'];
+            $tshirt->description = $formData['description'];
             $tshirt->category_id = $formData['category'];
             
-            $tshirt->update();
+            $tshirt->save();
+
+            if ($request->hasFile('tshirt_image')) {
+                if ($tshirt->image_url) {
+                    Storage::delete('public/tshirt_images/' . $tshirt->image_url);
+                }
+                
+                $path = $request->tshirt_image->store('public/tshirt_images');
+                $tshirt->image_url = basename($path);
+                $tshirt->save();
+            }
+            
             return $tshirt;
         });
             
