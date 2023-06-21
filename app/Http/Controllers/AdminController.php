@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangeAdminRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,8 +20,32 @@ class AdminController extends Controller
 
     public function index(Request $request): View
     {
-        $users = User::query()->paginate(20); 
-        return view('management.users.index')->with('users', $users);
+        $filterByName = $request->name ?? '';
+        $filterByEmail = $request->email ?? '';
+        $filterByUserType = $request->user_type ?? '';
+        $filterByBlocked = $request->blocked ?? '';
+
+        $userQuery = User::query(); 
+
+        if ($filterByName != '') {
+            $userQuery->where('name','like',"%$filterByName%");
+        }
+
+        if ($filterByEmail !== '') {
+            $userQuery->where('email', $filterByEmail);
+        }
+
+        if ($filterByUserType != '') {
+            $userQuery->where('user_type',$filterByUserType);
+        }
+
+        if ($filterByBlocked != '') {
+            $userQuery->where('blocked',$filterByBlocked);
+        }
+
+        $users = $userQuery->paginate(20); 
+
+        return view('management.users.index',compact('users','filterByName','filterByEmail','filterByUserType','filterByBlocked'));
     }
 
     public function edit($id): View
@@ -39,7 +64,7 @@ class AdminController extends Controller
     {
         $formData = $request->validated();
 
-        $user = DB::transaction(function () use ($formData, $request) {
+        $user = DB::transaction(function () use ($formData) {
             $newUser = new User();
 
             $newUser->name = $formData['name'];
@@ -80,7 +105,8 @@ class AdminController extends Controller
         $htmlMessage = "User <strong>\"{$user->name}\"</strong> successfully updated!";
 
         return redirect()->route('users.index')
-        ->with('alert-msg', $htmlMessage);
+        ->with('alert-msg', $htmlMessage)
+        ->with('alert-type','success');
     }
 
     public function statistic(): View
@@ -121,8 +147,20 @@ class AdminController extends Controller
         return view('management.statistics',compact('salesEvo','salesPerCat','todaySales','totalToday'));
     }
 
-    /*public function destroy(UserRequest $request): RedirectResponse 
+    public function changeBlock(ChangeAdminRequest $request, User $user): RedirectResponse 
     {
+        $user->blocked = $request->validated()['blocked'];
+        $user->save();
+        $strMsg = $user->blocked ? '" is now blocked!' : '" is now unblocked!';
+        
+        return back()
+            ->with('alert-msg', 'User "' . $user->name . $strMsg)
+            ->with('alert-type', $user->blocked ? 'warning' : 'success');
+    }
 
-    }*/
+    public function destroy(User $user): RedirectResponse 
+    {
+       $user->delete();
+        return redirect()->route('users.index');
+    }
 }

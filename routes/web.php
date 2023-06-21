@@ -38,8 +38,12 @@ Route::controller(OrderController::class)->group(function () {
 Route::controller(AdminController::class)->group(function () {
     Route::get('/mgmt', 'home')->name('mgmt.home');
     Route::get('/mgmt/statistics', 'statistic')->name('statistics');
-    //Route::get('/mgmt/users', 'users')->name('users');
-    //Route::get('/mgmt/users/{id}/edit', 'userEdit')->name('users.edit');
-    //Route::put('/mgmt/users/{id}', 'update')->name('users.update');
+    Route::patch('/mgmt/users/{user}/blocked','changeBlock')->name('user.blocked.change');
+    Route::delete('mgmt/users/{user}','destroy')->name('users.destroy');
+    Route::resource('/mgmt/users',AdminController::class);
+});
+
+Route::controller(CategoriesController::class)->group(function () {
+    Route::delete('mgmt/categories/{category}','destroy')->name('category.destroy');
     Route::resource('/mgmt/users',AdminController::class);
 });
