@@ -22,7 +22,7 @@
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-chart-area me-1"></i>
-                        Sales per category (Last 12 mo.)
+                        Products sold per category (Last 12 mo.)
                     </div>
                     <div class="card-body"><canvas id="salesPerCat" width="100%" height="40"></canvas></div>
                 </div>
