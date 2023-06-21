@@ -6,6 +6,7 @@ use App\Http\Controllers\TshirtController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,6 +17,7 @@ use App\Http\Controllers\UserController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 //PUBLIC ROUTES
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home');
@@ -23,9 +25,9 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/tshirts/detail/{id}','show')->name('detail');
 });
 
-
 Route::view('/cart','cart');
 Route::view('/checkout','checkout');
+Route::view('/', 'home');
 
 //ORDERS ROUTES
 Route::controller(OrderController::class)->group(function () {
@@ -43,3 +45,6 @@ Route::controller(AdminController::class)->group(function () {
     //Route::put('/mgmt/users/{id}', 'update')->name('users.update');
     Route::resource('/mgmt/users',AdminController::class);
 });
+
+Auth::routes();
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
