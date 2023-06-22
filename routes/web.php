@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PriceController;
 use App\Http\Controllers\TshirtController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CategoryController;
@@ -64,6 +66,15 @@ Route::controller(TshirtController::class)->group(function () {
 Route::controller(ColorController::class)->group(function () {
     Route::delete('/mgmt/colors/{color}','destroy')->name('colors.destroy');
     Route::resource('/mgmt/colors',ColorController::class);
+});
+
+//PRICE ROUTES
+Route::resource('/mgmt/prices',PriceController::class)->only(['index','update']);
+
+//STAFF PASSWORD CHANGES
+Route::controller(UserController::class)->group(function () {
+    Route::get('/mgmt/changepassword','changePasswordStaff')->name('staff.changePassword');
+    Route::patch('/mgmt/changepassword/{user}/password','update')->name('staff.password.change');
 });
 
 //Auth::routes();
