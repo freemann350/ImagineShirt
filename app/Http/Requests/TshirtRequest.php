@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TshirtRequest extends FormRequest
 {
@@ -23,7 +24,13 @@ class TshirtRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'category' => 'required'
+            'category' => 'required',
+            'description' => 'sometimes',
+            'tshirt_image' => [
+                'image',
+                'max:4096',
+                Rule::requiredIf(!isset($this->tshirt_id))
+            ]
         ];
     }
 
@@ -31,7 +38,10 @@ class TshirtRequest extends FormRequest
     {
         return [
             'name.required' => 'Name is required',
-            'category.required' => 'Category is required'
+            'category.required' => 'Category is required',
+            'tshirt_image.required' => 'Image is required on creation',
+            'tshirt_image.image' => 'File is not image type',
+            'tshirt_image.size' => 'Size cannot exceed 4MB',
         ];
     }
 }

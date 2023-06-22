@@ -84,6 +84,7 @@
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
+                            <th>Image</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Type</th>
@@ -94,6 +95,9 @@
                     <tbody>
                         @foreach ($users as $user)    
                         <tr>
+                            <td>
+                                <img src="{{$user->photo_url != NULL ? $user->profilePhoto : asset('storage/default.jpg')}}" class="rounded-circle img-thumbnail" style="weight: 50px; height:50px"></img>
+                            </td>
                             <td>{{$user->name}}</td>
                             <td>{{$user->email}}</td>
                             <td>

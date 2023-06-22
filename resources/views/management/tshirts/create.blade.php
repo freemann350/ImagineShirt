@@ -16,7 +16,7 @@
                 Add new tshirt
             </div>
             <div class="card-body">
-            <form method="POST" action="{{route('tshirts.store')}}">
+            <form method="POST" action="{{route('tshirts.store')}}" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col">
@@ -28,8 +28,38 @@
                         </div>
                         @enderror
                     </div>
-                    <br>
+                    <div class="col">
+                        <label>Category</label>
+                        <select class="form-control  @error('category') is-invalid @enderror" name="category">
+                            @foreach ($categories as $category)
+                            <option value="{{$category->id}}">{{$category->name}}</option>
+                            @endforeach
+                        </select>
+                        @error('category')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
                 </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Tshirt picture</label>
+                        <br>
+                        <input type="file" class="form-control @error('tshirt_image') is-invalid @enderror"  name="tshirt_image">
+                        @error('tshirt_image')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="col">
+                        <label>Description</label>
+                        <textarea class="form-control" name="description"></textarea>
+                    </div>
+                </div>
+                <br>
                 <br>
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
