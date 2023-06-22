@@ -25,10 +25,15 @@ class HomeController extends Controller
     public function catalog(Request $request): View
     {
         $filterByCategory = $request->category ?? '';
+        $filterByName = $request->name ?? '';
         $tshirtsQuery = Tshirt::query();
     
         if ($filterByCategory != '') {
             $tshirtsQuery->where('category_id',$filterByCategory);
+        }
+
+        if ($filterByName != '') {
+            $tshirtsQuery->where('name','like',"%$filterByName%");
         }
 
         $tshirts = $tshirtsQuery->paginate(20);
