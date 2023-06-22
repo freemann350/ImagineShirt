@@ -8,12 +8,13 @@ use App\Models\Category;
 use App\Models\Color;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except('index');
+        $this->middleware('auth')->except('index', 'cart', 'catalog', 'show');
     }
 
     public function index(): View

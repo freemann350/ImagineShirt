@@ -30,7 +30,6 @@ Route::controller(HomeController::class)->group(function () {
 
 Route::view('/checkout','checkout');
 
-
 //ORDERS ROUTES
 Route::controller(OrderController::class)->group(function () {
     Route::get('/mgmt/pending-orders/', 'showPending')->name('orders.pending');
@@ -79,3 +78,6 @@ Route::controller(UserController::class)->group(function () {
 
 Auth::routes();
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/cart', [App\Http\Controllers\HomeController::class, 'cart'])->name('cart');
+Route::get('/tshirts', [App\Http\Controllers\HomeController::class, 'catalog'])->name('catalog');
+Route::get('/tshirts/detail/{id}', [App\Http\Controllers\HomeController::class, 'show'])->name('detail');
