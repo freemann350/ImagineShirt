@@ -23,6 +23,7 @@
     <link href="{{ url('css/style.css') }}" rel="stylesheet">
 
     <!-- Scripts -->
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 
@@ -43,7 +44,7 @@
                     <h6 class="m-0">Categorias</h6>
                     <i class="fa fa-angle-down text-dark"></i>
                 </a>
-                <nav class="collapse @yield('navbar-opt') navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 2;">
+                <nav class="navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 2;">
                     <div class="navbar-nav w-100 overflow-hidden" style="height: auto">
                         @foreach ($categories = \App\Models\Category::all() as $category)
                             <a href="{{route('catalog')}}?category={{$category->id}}" class="nav-item nav-link">{{ $category->name }}</a>
@@ -86,6 +87,7 @@
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="#">Perfil</a>
                                     <a class="dropdown-item" href="#">Encomendas</a>
+                                    <a class="dropdown-item" href="#">Upload</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
