@@ -15,7 +15,7 @@
                 Edit <i>{{$user->name}}</i>'s information
             </div>
             <div class="card-body">
-            <form method="POST" action="{{ route('users.update', ['user' => $user]) }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('users.update', $user) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="row">
