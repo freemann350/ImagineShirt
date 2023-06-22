@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PriceController;
 use App\Http\Controllers\TshirtController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -63,3 +64,6 @@ Route::controller(ColorController::class)->group(function () {
     Route::delete('/mgmt/colors/{color}','destroy')->name('colors.destroy');
     Route::resource('/mgmt/colors',ColorController::class);
 });
+
+//PRICE ROUTES
+Route::resource('/mgmt/prices',PriceController::class)->only(['index','update']);
