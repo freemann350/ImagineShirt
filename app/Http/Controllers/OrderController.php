@@ -14,7 +14,7 @@ class OrderController extends Controller
 {
     public function __construct()
     {
-        //$this->authorizeResource(Order::class, 'orders');
+        $this->middleware('auth');
     }
 
     public function showPending(Request $request): View

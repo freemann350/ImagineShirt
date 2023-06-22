@@ -15,6 +15,12 @@ use Illuminate\Http\RedirectResponse;
 
 class AdminController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function home(): View
     {
         return view('management.index');
