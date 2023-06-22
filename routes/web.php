@@ -77,27 +77,5 @@ Route::controller(UserController::class)->group(function () {
     Route::patch('/mgmt/changepassword/{user}/password','update')->name('staff.password.change');
 });
 
-//Auth::routes();
-//Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-//CATEGORIES ROUTES
-Route::controller(CategoryController::class)->group(function () {
-    Route::delete('/mgmt/categories/{category}','destroy')->name('categories.destroy');
-    Route::resource('/mgmt/categories',CategoryController::class);
-});
-
-//TSHIRTS ROUTES
-Route::controller(TshirtController::class)->group(function () {
-    Route::delete('/mgmt/tshirts/{tshirt}','destroy')->name('tshirts.destroy');
-    Route::get('/mgmt/tshirts/file/{file}','getPrivateFile')->name('tshirts.get.image'); //GET FOR PRIVATE IMAGES
-    Route::resource('/mgmt/tshirts',TshirtController::class);
-});
-
-//COLOR ROUTES
-Route::controller(ColorController::class)->group(function () {
-    Route::delete('/mgmt/colors/{color}','destroy')->name('colors.destroy');
-    Route::resource('/mgmt/colors',ColorController::class);
-});
-
 Auth::routes();
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
