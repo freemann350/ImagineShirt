@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\CustomerController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,6 +21,15 @@ use App\Http\Controllers\ColorController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+//GUEST ROUTES
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/cart', [App\Http\Controllers\HomeController::class, 'cart'])->name('cart');
+Route::get('/tshirts', [App\Http\Controllers\HomeController::class, 'catalog'])->name('catalog');
+Route::get('/tshirts/detail/{id}', [App\Http\Controllers\HomeController::class, 'show'])->name('detail');
+
+//AUTH ROUTES
+Auth::routes();
 
 //PUBLIC ROUTES
 Route::controller(HomeController::class)->group(function () {
@@ -76,8 +87,9 @@ Route::controller(UserController::class)->group(function () {
     Route::patch('/mgmt/changepassword/{user}/password','update')->name('staff.password.change');
 });
 
-Auth::routes();
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/cart', [App\Http\Controllers\HomeController::class, 'cart'])->name('cart');
-Route::get('/tshirts', [App\Http\Controllers\HomeController::class, 'catalog'])->name('catalog');
-Route::get('/tshirts/detail/{id}', [App\Http\Controllers\HomeController::class, 'show'])->name('detail');
+//CUSTOMER ROUTES
+Route::controller(CustomerController::class)->group(function () {
+    Route::get('/profile/{id}','index')->name('profile');
+    Route::put('/profile/{id}/editUser','updateUser')->name('updateUser');
+    Route::put('/profile/{id}/editCustomer','updateCustomer')->name('updateCustomer');
+});

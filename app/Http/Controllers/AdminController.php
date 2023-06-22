@@ -60,7 +60,8 @@ class AdminController extends Controller
         return view('management.users.edit')->with(['user'=> $user]);
     }
 
-    public function create() : View{
+    public function create() : View
+    {
         return view('management.users.create');
     }
     

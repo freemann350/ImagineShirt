@@ -85,9 +85,9 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">Perfil</a>
+                                    <a class="dropdown-item" href="{{ route('profile', Auth::user()->id) }}">Perfil</a>
                                     <a class="dropdown-item" href="#">Encomendas</a>
-                                    <a class="dropdown-item" href="#">Upload</a>
+                                    <a class="dropdown-item" href="#">Upload de imagens</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
