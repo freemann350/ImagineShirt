@@ -15,7 +15,7 @@
                 Edit <i>{{$user->name}}</i>'s information
             </div>
             <div class="card-body">
-            <form method="POST" action="{{ route('users.update', ['user' => $user]) }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('users.update', ['user' => $user]) }}">
                 @csrf
                 @method('PUT')
                 <div class="row">
@@ -57,21 +57,6 @@
                     <div class="col">
                         <label>Password</label>
                         <input type="text" class="form-control" placeholder="Password" name="password">
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-md-4">
-                        <label>Profile picture</label>
-                        <br>
-                        <img src="{{$user->photo_url != NULL ? $user->profilePhoto : asset('storage/default.jpg')}}" class="rounded-circle img-thumbnail">
-                        <br>
-                        <input type="file" class="form-control @error('photo') is-invalid @enderror"  name="photo">
-                        @error('photo')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                        @enderror
                     </div>
                 </div>
                 <br>

@@ -31,7 +31,6 @@ class UserRequest extends FormRequest
             ],
             'user_type' => 'required|in:A,E',
             'password' => Rule::requiredIf(!isset($this->user_id)),
-            'photo' => 'sometimes|image|max:4096',
             'blocked' => 'required|boolean',
         ];
     }
@@ -46,8 +45,6 @@ class UserRequest extends FormRequest
             'password.required' => 'Password cannot be empty',
             'user_type.required' => 'User type is required',
             'user_type.in' => 'User type must be Administrator or Employee',
-            'photo.image' => 'File is not image type',
-            'photo.size' => 'Size cannot exceed 4MB',
             'blocked.required' => 'Blocked is required',
             'blocked.boolean' => 'Blocked must be boolean',
             ];
