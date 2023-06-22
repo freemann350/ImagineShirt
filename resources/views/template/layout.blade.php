@@ -47,7 +47,7 @@
                 <nav class="collapse @yield('navbar-opt') navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 2;">
                     <div class="navbar-nav w-100 overflow-hidden" style="height: 779px">
                         @foreach ($categories = \App\Models\Category::all() as $category)
-                            <a href="" class="nav-item nav-link">{{ $category->name }}</a>
+                            <a href="{{route('catalog')}}?category={{$category->id}}" class="nav-item nav-link">{{ $category->name }}</a>
                         @endforeach
                     </div>
                 </nav>

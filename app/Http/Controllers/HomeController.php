@@ -21,10 +21,16 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function catalog(): View
+    public function catalog(Request $request): View
     {
-        $tshirts = Tshirt::all();
+        $filterByCategory = $request->category ?? '';
+        $tshirtsQuery = Tshirt::query();
     
+        if ($filterByCategory != '') {
+            $tshirtsQuery->where('category_id',$filterByCategory);
+        }
+
+        $tshirts = $tshirtsQuery->paginate(20);
         return view('tshirts.index', compact('tshirts'));
     }
 
