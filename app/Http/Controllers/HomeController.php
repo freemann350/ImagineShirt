@@ -8,12 +8,13 @@ use App\Models\Category;
 use App\Models\Color;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except('index');
+        $this->middleware('auth')->except('index', 'cart', 'catalog', 'show');
     }
 
     public function index(): View
@@ -23,7 +24,7 @@ class HomeController extends Controller
 
     public function catalog(): View
     {
-        $tshirts = Tshirt::all();
+        $tshirts = Tshirt::query()->paginate(20);
     
         return view('tshirts.index', compact('tshirts'));
     }
