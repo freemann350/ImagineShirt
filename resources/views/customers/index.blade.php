@@ -11,23 +11,23 @@
                     @csrf
                     @method('PUT')
                     <div class="mb-4">
-                        <h4 class="font-weight-semi-bold mb-4">Mudar nome</h4>
+                        <h4 class="font-weight-semi-bold mb-4">Nome</h4>
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <input class="form-control" type="text" placeholder="João Pedro">
+                                <input class="form-control" type="text" placeholder="João Pedro" value="{{Auth::user()->name}}">
                             </div>
                         </div>
                     </div>
                     <div class="mb-4">
-                        <h4 class="font-weight-semi-bold mb-4">Mudar e-mail</h4>
+                        <h4 class="font-weight-semi-bold mb-4">E-mail</h4>
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <input class="form-control" type="text" placeholder="exemplo@email.com">
+                                <input class="form-control" type="text" placeholder="exemplo@email.com" value="{{Auth::user()->email}}>
                             </div>
                         </div>
                     </div>
                     <div class="mb-4">
-                        <h4 class="font-weight-semi-bold mb-4">Mudar password</h4>
+                        <h4 class="font-weight-semi-bold mb-4">Password</h4>
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <input class="form-control" type="text" placeholder="Nova password">
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                 </form>
-                <form method="POST" action="{{ route('updateCustomer', $customer) }}">
+                <form method="POST" action="">
                     @csrf
                     @method('PUT')
                     <div class="mb-4">                    

@@ -29,9 +29,10 @@ class CustomerController extends Controller
 
         if ($customer == NULL){
             $this->store($user->id);
+            $customer = Customer::find($user->id);
         }
 
-        return view('customers.index', compact('user', 'customer'));
+        return view('customers.index', compact('customer'));
     }
 
     public function store($id)

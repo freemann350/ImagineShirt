@@ -89,7 +89,7 @@ Route::controller(UserController::class)->group(function () {
 
 //CUSTOMER ROUTES
 Route::controller(CustomerController::class)->group(function () {
-    Route::get('/profile/{id}','index')->name('profile');
+    Route::get('/profile/{user}','index')->name('profile');
     Route::put('/profile/{id}/editUser','updateUser')->name('updateUser');
     Route::put('/profile/{id}/editCustomer','updateCustomer')->name('updateCustomer');
 });
