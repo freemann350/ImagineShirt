@@ -73,4 +73,5 @@ Route::resource('/mgmt/prices',PriceController::class)->only(['index','update'])
 Route::controller(UserController::class)->group(function () {
     Route::get('/mgmt/changepassword','changePasswordStaff')->name('staff.changePassword');
     Route::patch('/mgmt/changepassword/{user}/password','update')->name('staff.password.change');
+
 });
