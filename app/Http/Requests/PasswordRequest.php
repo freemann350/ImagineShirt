@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TshirtRequest extends FormRequest
+class PasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,16 +22,7 @@ class TshirtRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'category' => 'required'
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'name.required' => 'Name is required',
-            'category.required' => 'Category is required'
+            'password'=>'sometimes'
         ];
     }
 }

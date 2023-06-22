@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PriceController;
 use App\Http\Controllers\TshirtController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CategoryController;
@@ -46,6 +48,37 @@ Route::controller(AdminController::class)->group(function () {
     Route::delete('mgmt/users/{user}','destroy')->name('users.destroy');
     Route::resource('/mgmt/users',AdminController::class);
 });
+
+//CATEGORIES ROUTES
+Route::controller(CategoryController::class)->group(function () {
+    Route::delete('/mgmt/categories/{category}','destroy')->name('categories.destroy');
+    Route::resource('/mgmt/categories',CategoryController::class);
+});
+
+//TSHIRTS ROUTES
+Route::controller(TshirtController::class)->group(function () {
+    Route::delete('/mgmt/tshirts/{tshirt}','destroy')->name('tshirts.destroy');
+    Route::get('/mgmt/tshirts/file/{file}','getPrivateFile')->name('tshirts.get.image'); //GET FOR PRIVATE IMAGES
+    Route::resource('/mgmt/tshirts',TshirtController::class);
+});
+
+//COLOR ROUTES
+Route::controller(ColorController::class)->group(function () {
+    Route::delete('/mgmt/colors/{color}','destroy')->name('colors.destroy');
+    Route::resource('/mgmt/colors',ColorController::class);
+});
+
+//PRICE ROUTES
+Route::resource('/mgmt/prices',PriceController::class)->only(['index','update']);
+
+//STAFF PASSWORD CHANGES
+Route::controller(UserController::class)->group(function () {
+    Route::get('/mgmt/changepassword','changePasswordStaff')->name('staff.changePassword');
+    Route::patch('/mgmt/changepassword/{user}/password','update')->name('staff.password.change');
+});
+
+//Auth::routes();
+//Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 //CATEGORIES ROUTES
 Route::controller(CategoryController::class)->group(function () {

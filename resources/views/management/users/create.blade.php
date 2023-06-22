@@ -16,7 +16,7 @@
                 Add new user
             </div>
             <div class="card-body">
-            <form method="POST" action="{{route('users.store')}}" enctype="multipart/form-data">
+            <form method="POST" action="{{route('users.store')}}">
                 @csrf
                 <div class="row">
                     <div class="col">
@@ -57,19 +57,6 @@
                         <label>Password</label>
                         <input type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" name="password">
                         @error('password')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                        @enderror
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-md-4">
-                        <label>Profile picture</label>
-                        <br>
-                        <input type="file" class="form-control @error('photo') is-invalid @enderror"  name="photo">
-                        @error('photo')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
