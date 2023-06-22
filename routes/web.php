@@ -23,11 +23,11 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('/tshirts','catalog')->name('catalog');
     Route::get('/tshirts/detail/{id}','show')->name('detail');
+    Route::get('/cart', 'cart')->name('cart');
 });
 
-Route::view('/cart','cart');
 Route::view('/checkout','checkout');
-Route::view('/', 'home');
+
 
 //ORDERS ROUTES
 Route::controller(OrderController::class)->group(function () {
@@ -35,7 +35,7 @@ Route::controller(OrderController::class)->group(function () {
     Route::get('/mgmt/order-history/', 'showHistory')->name('orders.history');
     Route::patch('/mgmt/orders/{order}/status','changeStatus')->name('orders.status.change');
     Route::get('/mgmt/order/view/{id}', 'show')->name('orders.show');
-    Route::resource('/mgmt/order',OrderController::class);
+    Route::resource('/mgmt/order', OrderController::class);
 });
 
 //ADMINISTRATION ROUTES
