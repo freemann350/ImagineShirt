@@ -37,6 +37,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/tshirts','catalog')->name('catalog');
     Route::get('/tshirts/detail/{id}','show')->name('detail');
     Route::get('/cart', 'cart')->name('cart');
+
 });
 
 Route::view('/checkout','checkout');
@@ -100,4 +101,5 @@ Route::controller(CustomerController::class)->group(function () {
     Route::put('/profile/{user}/editUser','updateUser')->name('updateUser');
     Route::put('/profile/{customer}/editCustomer','updateCustomer')->name('updateCustomer');
     Route::put('/profile/{user}/uploadImage','uploadImage')->name('uploadImage');
+    Route::get('/mgmt/order/{id}/pdf', [OrderController::class, 'createPDF']); //PRECISO MUDAR DE LOCAL
 });

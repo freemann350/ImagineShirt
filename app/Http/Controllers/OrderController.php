@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeOrderStatusRequest;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\View\View;
+use Storage;
 
 class OrderController extends Controller
 {
@@ -126,5 +128,47 @@ class OrderController extends Controller
             'total'=>$orderQuery->total_price,
             'orderItems'=>$orderItemQuery
         ]);
+    }
+
+    public function showOrderTable($id): View
+    {
+        $orderQuery = Order::findOrFail($id); 
+
+        $orderItemQuery = OrderItem::where('order_id',$id)->paginate(20); 
+
+        return view('management.receipt_table')->with([
+            'name'=>$orderQuery->user->name,
+            'address'=>$orderQuery->address,
+            'nif'=>$orderQuery->nif,
+            'id'=>$orderQuery->id,
+            'date'=>$orderQuery->date,
+            'status'=>$orderQuery->status,
+            'total'=>$orderQuery->total_price,
+            'orderItems'=>$orderItemQuery
+        ]);
+    }
+
+    public function createPDF($id) {
+        $orderQuery = Order::findOrFail($id);
+        $orderItemQuery = OrderItem::where('order_id',$id)->paginate(20);
+
+        $data= [
+            'name'=>$orderQuery->user->name,
+            'address'=>$orderQuery->address,
+            'nif'=>$orderQuery->nif,
+            'id'=>$orderQuery->id,
+            'date'=>$orderQuery->date,
+            'total'=>$orderQuery->total_price,
+            'orderItems'=>$orderItemQuery
+        ];
+        
+        view()->share('orderItem',$data);
+        $pdf = PDF::loadView('receipt_table',$data);
+        
+        $filename = "Order_$id.pdf";
+        $content = $pdf->download('pdf_file.pdf');
+        Storage::put("pdf_receipts/$filename",$content) ;
+
+        return;
     }
 }
