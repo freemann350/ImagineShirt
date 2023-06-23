@@ -6,6 +6,7 @@ use App\Http\Controllers\TshirtController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,6 +18,7 @@ use App\Http\Controllers\CategoryController;
 |
 */
 //PUBLIC ROUTES
+
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('/tshirts','catalog')->name('catalog');
@@ -26,6 +28,7 @@ Route::controller(HomeController::class)->group(function () {
 
 Route::view('/cart','cart');
 Route::view('/checkout','checkout');
+Route::get('add-to-cart/{id}',[ProductController::class,'addToCart'])->name('addToCart');
 
 //ORDERS ROUTES
 Route::controller(OrderController::class)->group(function () {
