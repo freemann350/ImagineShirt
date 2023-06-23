@@ -35,6 +35,7 @@
                             <th>Date</th>
                             <th>Total</th>
                             <th>NIF</th>
+                            <th>Notes</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -44,8 +45,9 @@
                             <td>{{ $history->status }}</td>
                             <td>{{ $history->user->name }}</td>
                             <td>{{ $history->date }}</td>
-                            <td>{{ $history->total_price }}</td>
+                            <td>{{ $history->total_price }}€</td>
                             <td>{{ $history->nif }}</td>
+                            <td>{{ $history->notes ?? 'N/A' }}</td>
                             <td><a href="{{route ('orders.show',$history->id)}}"><i title="View all info regarding order #{{$history->id}}" class="fa-solid fa-file-lines"></i></a></td>
                         </tr>
                         @endforeach

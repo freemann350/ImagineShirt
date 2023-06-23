@@ -97,7 +97,7 @@ Route::controller(CustomerController::class)->group(function () {
     Route::get('/profile/{user}','index')->name('profile');
     Route::get('/profile/{user}/orders','orders')->name('orders');
     Route::get('/profile/{user}/upload','upload')->name('upload');
-    Route::put('/profile/{id}/editUser','updateUser')->name('updateUser');
-    Route::put('/profile/{id}/editCustomer','updateCustomer')->name('updateCustomer');
-    Route::put('/profile/{id}/uploadImage','uploadImage')->name('uploadImage');
+    Route::put('/profile/{user}/editUser','updateUser')->name('updateUser');
+    Route::put('/profile/{customer}/editCustomer','updateCustomer')->name('updateCustomer');
+    Route::put('/profile/{user}/uploadImage','uploadImage')->name('uploadImage');
 });

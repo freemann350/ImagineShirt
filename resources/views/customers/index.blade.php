@@ -10,11 +10,17 @@
                 <form method="POST" action="{{ route('updateUser', Auth::user()) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
+                    <input name="user_id" class="form-control" type="hidden" value="{{Auth::user()->id}}">
                     <div class="mb-4">
                         <h4 class="font-weight-semi-bold mb-4">Nome</h4>
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <input name="name" class="form-control" type="text" placeholder="João Pedro" value="{{Auth::user()->name}}">
+                                <input name="name" class="form-control @error('name') is-invalid @enderror" type="text" placeholder="João Pedro" value="{{Auth::user()->name}}">
+                                @error('name')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -22,7 +28,12 @@
                         <h4 class="font-weight-semi-bold mb-4">E-mail</h4>
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <input name="email" class="form-control" type="text" placeholder="exemplo@email.com" value="{{Auth::user()->email}}">
+                                <input name="email" class="form-control @error('email') is-invalid @enderror" type="text" placeholder="exemplo@email.com" value="{{Auth::user()->email}}">
+                                @error('email')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -30,7 +41,7 @@
                         <h4 class="font-weight-semi-bold mb-4">Password</h4>
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <input name="password" class="form-control" type="text" placeholder="Nova password">
+                                <input name="password" class="form-control" type="password" placeholder="Nova password">
                             </div>
                         </div>
                     </div>
@@ -48,7 +59,7 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Morada</label>
-                                <input name="address" class="form-control" type="text" placeholder="Rua 123 1234-567 Leiria" value="{{$customer->address}}">
+                                <input name="address" class="form-control @error('email') is-invalid @enderror" type="text" placeholder="Rua 123 1234-567 Leiria" value="{{$customer->address}}">
                             </div>
                         </div>
                     </div>
@@ -57,15 +68,32 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>NIF</label>
-                                <input name="nif" class="form-control" type="text" placeholder="123 456 789" value="{{$customer->nif}}">
+                                <input name="nif" class="form-control @error('nif') is-invalid @enderror" type="text" placeholder="123 456 789" value="{{$customer->nif}}">
+                                @error('nif')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>Tipo de pagamento</label>
-                                <input name="default_payment_type" class="form-control" type="text" placeholder="VISA" value="{{$customer->default_payment_type}}">
+                                <input name="default_payment_type" class="form-control @error('default_payment_type') is-invalid @enderror" type="text" placeholder="VISA" value="{{$customer->default_payment_type}}">
+                                @error('default_payment_type')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>Referência de pagamento</label>
-                                <input name="default_payment_ref" class="form-control" type="text" placeholder="123456789" value="{{$customer->default_payment_ref}}">
+                                <input name="default_payment_ref" class="form-control @error('default_payment_ref') is-invalid @enderror" type="text" placeholder="123456789" value="{{$customer->default_payment_ref}}">
+                                @error('default_payment_ref')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
                             </div>
                         </div>
                     </div>

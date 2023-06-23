@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CustomerDataRequest;
+use App\Models\Order;
 use App\Models\Tshirt;
 use App\Models\Price;
 use App\Models\Category;
@@ -10,6 +12,7 @@ use App\Models\Customer;
 use App\Models\User;
 use App\Http\Requests\CustomerRequest;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,12 +50,25 @@ class CustomerController extends Controller
 
     public function orders(User $user): View
     {
-        return view('customers.orders');
+        $ordersQuery = Order::query();
+        $ordersQuery->where('customer_id',$user->id);
+        $orders = $ordersQuery->paginate(20);
+
+        return view('customers.orders',compact('orders'));
     }
 
-    public function upload(User $user): View
+    public function upload(Request $request, User $user): View
     {
-        return view('customers.upload');
+        $filterByName = $request->name ?? '';
+        $privateTshirtsQuery = Tshirt::query();
+        $privateTshirtsQuery->where('customer_id',$user->id);
+
+        if ($filterByName != '') {
+            $privateTshirtsQuery->where('name','like',"%$filterByName%");
+        }
+        
+        $privateTshirts = $privateTshirtsQuery->paginate(20);
+        return view('customers.upload',compact('privateTshirts'));
     }
 
     public function uploadImage(UserRequest $request, User $user): RedirectResponse
@@ -68,7 +84,7 @@ class CustomerController extends Controller
         ->with('alert-type','success');
     }
 
-    public function updateUser(UserRequest $request, User $user): RedirectResponse
+    public function updateUser(CustomerDataRequest $request, User $user): RedirectResponse
     {
         $formData = $request->validated();
 
@@ -113,13 +129,13 @@ class CustomerController extends Controller
                 $customer->default_payment_ref = $formData['default_payment_ref'];
             }
             
-            $customer->update();
+            $customer->save();
             return $customer;
         });
             
         $htmlMessage = "Data successfully updated!";
 
-        return redirect()->route('profile', $customer->id)
+        return redirect()->route('profile', Auth::user())
         ->with('alert-msg', $htmlMessage)
         ->with('alert-type','success');
     }

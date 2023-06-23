@@ -26,6 +26,7 @@ class CustomerRequest extends FormRequest
             return [
                 'nif' => 'sometimes|digits:9',
                 'address' => 'sometimes',
+                'default_payment_type' => 'sometimes',
                 'default_payment_ref' => 'sometimes|digits:16'
             ];
         }
@@ -33,6 +34,7 @@ class CustomerRequest extends FormRequest
             return [
                 'nif' => 'sometimes|digits:9',
                 'address' => 'sometimes',
+                'default_payment_type' => 'sometimes',
                 'default_payment_ref' => 'sometimes|email'
             ];
         }

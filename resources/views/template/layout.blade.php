@@ -63,7 +63,6 @@
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
                             <a href="{{ route('catalog') }}" class="nav-item nav-link">Catálogo</a>
-                            <a href="" class="nav-item nav-link">Dashboard</a>
                             <a href="{{ route('cart') }}" class="nav-item nav-link"><i class="fa-solid fa-cart-shopping" style="color: #f03c3c;"></i> Carrinho</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0">
@@ -89,6 +88,7 @@
                                     <a class="dropdown-item" href="{{ route('profile', Auth::user()) }}">Perfil</a>
                                     <a class="dropdown-item" href="{{ route('orders', Auth::user()) }}">Encomendas</a>
                                     <a class="dropdown-item" href="{{ route('upload', Auth::user()) }}">Imagens próprias</a>
+                                    <a class="dropdown-item" href="{{ route('mgmt.home')}}">Dashboard</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

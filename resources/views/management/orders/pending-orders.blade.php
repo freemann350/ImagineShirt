@@ -49,7 +49,7 @@
                         <tr>
                             <td>{{$order->date}}</td>
                             <td>{{$order->user->name}}</td>
-                            <td>{{$order->total_price}}</td>
+                            <td>{{$order->total_price}}€</td>
                             <td>
                                 @if ($order->status == 'pending' )
                                     <form action="{{ route('orders.status.change', $order) }}" method="POST">

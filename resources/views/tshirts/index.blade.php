@@ -12,7 +12,6 @@
                     <div class="col-12 pb-1">
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             <form action="{{route('catalog')}}" method="GET">
-                                @csrf
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="Search by name" name="name">
                                     <button class="input-group-append">

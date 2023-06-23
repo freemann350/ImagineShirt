@@ -36,6 +36,8 @@ class HomeController extends Controller
             $tshirtsQuery->where('name','like',"%$filterByName%");
         }
 
+        $tshirtsQuery->where('category_id', "IS NOT", NULL);
+
         $tshirts = $tshirtsQuery->paginate(20);
         return view('tshirts.index', compact('tshirts'));
     }
