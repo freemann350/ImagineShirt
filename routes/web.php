@@ -90,6 +90,9 @@ Route::controller(UserController::class)->group(function () {
 //CUSTOMER ROUTES
 Route::controller(CustomerController::class)->group(function () {
     Route::get('/profile/{user}','index')->name('profile');
+    Route::get('/profile/{user}/orders','orders')->name('orders');
+    Route::get('/profile/{user}/upload','upload')->name('upload');
     Route::put('/profile/{id}/editUser','updateUser')->name('updateUser');
     Route::put('/profile/{id}/editCustomer','updateCustomer')->name('updateCustomer');
+    Route::put('/profile/{id}/uploadImage','uploadImage')->name('uploadImage');
 });

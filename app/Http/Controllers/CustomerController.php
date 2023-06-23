@@ -32,7 +32,7 @@ class CustomerController extends Controller
             $customer = Customer::find($user->id);
         }
 
-        return view('customers.index', compact('customer'));
+        return view('customers.index', compact('user', 'customer'));
     }
 
     public function store($id)
@@ -43,6 +43,29 @@ class CustomerController extends Controller
         $newCustomer->save();
 
         return;
+    }
+
+    public function orders(User $user): View
+    {
+        return view('customers.orders');
+    }
+
+    public function upload(User $user): View
+    {
+        return view('customers.upload');
+    }
+
+    public function uploadImage(UserRequest $request, User $user): RedirectResponse
+    {
+        /* if ($request->hasFile('photo')) {
+            $user->save();
+        } */
+
+        $htmlMessage = "Image successfully uploaded!";
+
+        return redirect()->route('customers.upload')
+        ->with('alert-msg', $htmlMessage)
+        ->with('alert-type','success');
     }
 
     public function updateUser(UserRequest $request, User $user): RedirectResponse
@@ -57,13 +80,13 @@ class CustomerController extends Controller
                 $user->password = Hash::make($formData['password']);
             }
             
-            $user->update();
+            $user->save();
             return $user;
         });
             
         $htmlMessage = "User <strong>\"{$user->name}\"</strong> successfully updated!";
 
-        return redirect()->route('customers.index')
+        return redirect()->route('profile', $user->id)
         ->with('alert-msg', $htmlMessage)
         ->with('alert-type','success');
     }
@@ -96,7 +119,7 @@ class CustomerController extends Controller
             
         $htmlMessage = "Data successfully updated!";
 
-        return redirect()->route('customers.index')
+        return redirect()->route('profile', $customer->id)
         ->with('alert-msg', $htmlMessage)
         ->with('alert-type','success');
     }

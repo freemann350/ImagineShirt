@@ -14,7 +14,7 @@
                         <h4 class="font-weight-semi-bold mb-4">Nome</h4>
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <input class="form-control" type="text" placeholder="João Pedro" value="{{Auth::user()->name}}">
+                                <input name="name" class="form-control" type="text" placeholder="João Pedro" value="{{Auth::user()->name}}">
                             </div>
                         </div>
                     </div>
@@ -22,7 +22,7 @@
                         <h4 class="font-weight-semi-bold mb-4">E-mail</h4>
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <input class="form-control" type="text" placeholder="exemplo@email.com" value="{{Auth::user()->email}}>
+                                <input name="email" class="form-control" type="text" placeholder="exemplo@email.com" value="{{Auth::user()->email}}">
                             </div>
                         </div>
                     </div>
@@ -30,12 +30,17 @@
                         <h4 class="font-weight-semi-bold mb-4">Password</h4>
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <input class="form-control" type="text" placeholder="Nova password">
+                                <input name="password" class="form-control" type="text" placeholder="Nova password">
                             </div>
                         </div>
                     </div>
+                    <div class="card-footer border-secondary bg-transparent">
+                        <button type="submit" class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3"><i class="fas fa-save"></i> Guardar dados</button>
+                    </div>
                 </form>
-                <form method="POST" action="">
+            </div>
+            <div class="col-lg-8">
+                <form method="POST" action="{{ route('updateCustomer', $customer) }}">
                     @csrf
                     @method('PUT')
                     <div class="mb-4">                    
@@ -43,7 +48,7 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Morada</label>
-                                <input class="form-control" type="text" placeholder="Rua 123 1234-567 Leiria">
+                                <input name="address" class="form-control" type="text" placeholder="Rua 123 1234-567 Leiria" value="{{$customer->address}}">
                             </div>
                         </div>
                     </div>
@@ -52,17 +57,20 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>NIF</label>
-                                <input class="form-control" type="text" placeholder="123 456 789">
+                                <input name="nif" class="form-control" type="text" placeholder="123 456 789" value="{{$customer->nif}}">
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>Tipo de pagamento</label>
-                                <input class="form-control" type="text" placeholder="VISA">
+                                <input name="default_payment_type" class="form-control" type="text" placeholder="VISA" value="{{$customer->default_payment_type}}">
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>Referência de pagamento</label>
-                                <input class="form-control" type="text" placeholder="132456789">
+                                <input name="default_payment_ref" class="form-control" type="text" placeholder="123456789" value="{{$customer->default_payment_ref}}">
                             </div>
                         </div>
+                    </div>
+                    <div class="card-footer border-secondary bg-transparent">
+                        <button type="submit" class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3"><i class="fas fa-save"></i> Guardar dados</button>
                     </div>
                 </form>
             </div>
