@@ -73,7 +73,7 @@ Route::middleware('admin')->group(function () {
 //TSHIRTS ROUTES
     Route::controller(TshirtController::class)->group(function () {
         Route::delete('/mgmt/tshirts/{tshirt}','destroy')->name('tshirts.destroy');
-        Route::get('/mgmt/tshirts/file/{file}','getPrivateFile')->name('tshirts.get.image'); //GET FOR PRIVATE IMAGES
+        Route::get('/file/{file}','getPrivateFile')->name('tshirts.get.image'); //GET FOR PRIVATE IMAGES
         Route::resource('/mgmt/tshirts',TshirtController::class);
     });
 
