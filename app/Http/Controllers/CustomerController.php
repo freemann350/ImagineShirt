@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerDataRequest;
+use App\Http\Requests\TshirtUploadRequest;
 use App\Models\Order;
 use App\Models\Tshirt;
 use App\Models\Price;
@@ -13,6 +14,7 @@ use App\Models\User;
 use App\Http\Requests\CustomerRequest;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -71,15 +73,28 @@ class CustomerController extends Controller
         return view('customers.upload',compact('privateTshirts'));
     }
 
-    public function uploadImage(UserRequest $request, User $user): RedirectResponse
+    public function uploadImage(TshirtUploadRequest $request, User $user): RedirectResponse
     {
-        /* if ($request->hasFile('photo')) {
-            $user->save();
-        } */
+        $formData = $request->validated();
+
+        $tshirt = DB::transaction(function () use ($formData, $request, $user) {
+            $newTshirt = new Tshirt();
+
+            $newTshirt->name = $formData['name'];
+            $newTshirt->description = $formData['description'];
+            $newTshirt->customer_id = $user->id;
+
+            $path = $request->photo->store('tshirt_images_private');
+
+            $newTshirt->image_url = basename($path);
+            $newTshirt->save();
+
+            return $newTshirt;
+        });
 
         $htmlMessage = "Image successfully uploaded!";
 
-        return redirect()->route('customers.upload')
+        return redirect()->route('upload', $user)
         ->with('alert-msg', $htmlMessage)
         ->with('alert-type','success');
     }

@@ -118,6 +118,6 @@ class TshirtController extends Controller
 
     public function getPrivateFile($filename)
     {
-        return response()->download(storage_path("/tshirt_images_private/$filename"), null, [], null);
+        return response()->download(storage_path("tshirt_images_private/$filename"), null, [], null);
     }
 }

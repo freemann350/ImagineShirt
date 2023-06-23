@@ -7,15 +7,20 @@
     <div class="container-fluid pt-5">
         <div class="row px-xl-5">
             <div class="col-lg-8">
-                <form method="POST" action="" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('uploadImage', Auth::user()) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="row">
                         <div class="mb-4">
                             <h4 class="font-weight-semi-bold mb-4">Carregue aqui a sua imagem</h4>
-                            <img src="" class="">
-                            <br>
-                            <input type="file" class=""  name="photo">
+                            <input name="name" class="form-control" type="text" placeholder="Nome da imagem">
+                            @error('name')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                            <input name="description" class="form-control" type="text" placeholder="Descrição da imagem">
+                            <input name="photo" type="file" class="form-control">
                             @error('photo')
                             <div class="invalid-feedback">
                                 {{ $message }}
