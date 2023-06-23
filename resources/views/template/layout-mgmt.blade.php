@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Dashboard - SB Admin</title>
+        <title>Dashboard</title>
         <link href="{{url('css/mgmtstyle.css')}}" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
@@ -22,11 +22,15 @@
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="{{Auth::user()->photo_url ? Auth::user()->profilePhoto : asset('storage/default.jpg')}}" class="rounded-circle " style="weight: 25px; height:25px"></img></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Settings</a></li>
+                        <li><a class="dropdown-item" href="{{route('staff.changePassword')}}">Change password</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Logout</a></li>
+                        <li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -41,6 +45,7 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Main page
                             </a>
+                            @can('view',\App\Models\User::class)
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseAdm" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
                                 Administration
@@ -48,11 +53,15 @@
                             </a>
                             <div class="collapse" id="collapseAdm" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'tshirts.index' ? 'active' : '' }}" href="{{ route('tshirts.index') }}">Tshirts</a>
+                                    <a class="nav-link {{ Route::currentRouteName() == 'prices.index' ? 'active' : '' }}" href="{{ route('prices.index') }}">Prices</a>
+                                    <a class="nav-link {{ Route::currentRouteName() == 'categories.index' ? 'active' : '' }}" href="{{ route('categories.index') }}">Categories</a>
+                                    <a class="nav-link {{ Route::currentRouteName() == 'colors.index' ? 'active' : '' }}" href="{{ route('colors.index') }}">Colors</a>
                                     <a class="nav-link {{ Route::currentRouteName() == 'statistics' ? 'active' : '' }}" href="{{ route('statistics') }}">Statistics</a>
                                     <a class="nav-link {{ Route::currentRouteName() == 'users.index' ? 'active' : '' }}" href="{{ route('users.index') }}">Users</a>
-                                    <a class="nav-link {{ Route::currentRouteName() == 'categories.index' ? 'active' : '' }}" href="{{ route('categories.index') }}">Categories</a>
                                 </nav>
                             </div>
+                            @endcan
                             
                             <div class="sb-sidenav-menu-heading">Sales</div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSales" aria-expanded="false" aria-controls="collapseLayouts">
@@ -70,7 +79,7 @@
                     </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
-                        Start Bootstrap
+                        {{ Auth::user()->name }}
                     </div>
                 </nav>
             </div>

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangeOrderStatusRequest;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -12,7 +14,7 @@ class OrderController extends Controller
 {
     public function __construct()
     {
-        //$this->authorizeResource(Order::class, 'orders');
+        $this->middleware('auth');
     }
 
     public function showPending(Request $request): View
@@ -48,6 +50,7 @@ class OrderController extends Controller
         }
 
         $pendingQuery->where('status','pending');
+        $pendingQuery->orWhere('status','paid');
         $orderPending = $pendingQuery->paginate(20);
         
         return view('management.orders.pending-orders',compact('orderPending','filterByStatus','filterByName','filterByDateStart','filterByDateEnd','filterByNIF'));
@@ -88,6 +91,23 @@ class OrderController extends Controller
         $orderHistory = $historyQuery->paginate(20);
 
         return view('management.orders.order-history',compact('orderHistory','filterByStatus','filterByName','filterByDateStart','filterByDateEnd','filterByNIF'));
+    }
+
+    public function changeStatus(ChangeOrderStatusRequest $request, Order $order): RedirectResponse
+    {
+        $order->status = $request->validated()['status'];
+
+        $order->save();
+
+        if ($order->status == 'paid') {
+            $strMsg = ' is now paid!' ;
+        } elseif ($order->status == 'closed') {
+            $strMsg = ' is now closed!' ;
+        }
+        
+        return back()
+            ->with('alert-msg', 'Order #' . $order->id . $strMsg)
+            ->with('alert-type', 'success');
     }
 
     public function show($id): View

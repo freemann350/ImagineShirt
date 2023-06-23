@@ -8,18 +8,38 @@ use App\Models\Category;
 use App\Models\Color;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function __construct()
+    {
+        $this->middleware('auth')->except('index', 'cart', 'catalog', 'show');
+    }
+
+    public function index(): View
     {
         return view('home');
     }
 
-    public function catalog(): View
+    public function catalog(Request $request): View
     {
-        $allTshirt_images = Tshirt::all(); 
-        return view('tshirts.index')->with('tshirt_images', $allTshirt_images);
+        $filterByCategory = $request->category ?? '';
+        $filterByName = $request->name ?? '';
+        $tshirtsQuery = Tshirt::query();
+    
+        if ($filterByCategory != '') {
+            $tshirtsQuery->where('category_id',$filterByCategory);
+        }
+
+        if ($filterByName != '') {
+            $tshirtsQuery->where('name','like',"%$filterByName%");
+        }
+
+        $tshirtsQuery->where('category_id', "IS NOT", NULL);
+
+        $tshirts = $tshirtsQuery->paginate(20);
+        return view('tshirts.index', compact('tshirts'));
     }
 
     public function show($id): View
@@ -29,6 +49,12 @@ class HomeController extends Controller
         $category = $category->name;
         $price = Price::all()->first();
         $color= Color::all();
+
         return view('tshirts.show',['tshirt'=> $tshirt, 'category'=>$category,'price'=>$price,'colors'=>$color]);
+    }
+
+    public function cart(): View
+    {
+        return view('cart.index');
     }
 }

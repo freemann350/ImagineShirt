@@ -17,6 +17,14 @@
             'filterByDateEnd' => old('dateend',$filterByDateEnd),
             'filterByDateNIF' => old('nif',$filterByNIF)
         ])
+
+        @if (session('alert-msg'))
+        <div class="col">
+            <div class="card bg-{{session('alert-type')}} text-white mb-4 ">
+                <div class="card-body">{!! session('alert-msg') !!}</div>
+            </div>
+        </div> 
+        @endif
         
         <div class="card mb-4">
             <div class="card-header">
@@ -41,8 +49,24 @@
                         <tr>
                             <td>{{$order->date}}</td>
                             <td>{{$order->user->name}}</td>
-                            <td>{{$order->total_price}}</td>
-                            <td><a href="{{route ('orders.show',$order->id)}}"><i title="View all info regarding order #{{$order->id}}" class="fa-solid fa-file-lines"></i></a></td>
+                            <td>{{$order->total_price}}€</td>
+                            <td>
+                                @if ($order->status == 'pending' )
+                                    <form action="{{ route('orders.status.change', $order) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="paid">
+                                        <button style="color:blue"  title="Set status as paid" type="submit" class="btn"><i class="fa-solid fa-money-bill-wave"></i></button>
+                                    </form>
+                                @else
+                                    <form action="{{ route('orders.status.change', $order) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="closed">
+                                        <button style="color:blue"  title="Set status as  closed" type="submit" class="btn"><i class="fa-solid fa-check"></i></button>
+                                    </form>
+                                @endif
+                                <a class="btn" style="color:blue" href="{{route ('orders.show',$order->id)}}"><i title="View all info regarding order #{{$order->id}}" class="fa-solid fa-file-lines"></i></a></td>
                         </tr>
                         @endforeach
                     </tbody>
