@@ -9589,3 +9589,8 @@ img {
   margin-bottom: 10px;
   margin-top: 10px;
 }
+
+.form-check-input:checked {
+ background-color:#f03c3c !important;
+ border-color:#f03c3c !important;
+}

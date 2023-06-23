@@ -6,6 +6,8 @@
     <title>ImagineShirt</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
     <!-- Favicon -->
     <link href="{{ url('img/favicon.png') }}" rel="icon">
 
@@ -23,7 +25,6 @@
     <link href="{{ url('css/style.css') }}" rel="stylesheet">
 
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 

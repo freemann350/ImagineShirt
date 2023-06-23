@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthorizeEmployee
@@ -18,7 +19,7 @@ class AuthorizeEmployee
         if (!($request->user()->user_type == 'A' || $request->user()->user_type == 'E')) {
             return $request->expectsJson()
             ? abort(404, 'You are not an employee/administrator.')
-            : redirect()->route('catalog')
+            : redirect()->route('profile', Auth::user())
             ->with('alert-msg', 'You are not an employee/administrator.')
             ->with('alert-type', 'danger');
         }
