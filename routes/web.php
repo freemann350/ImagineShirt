@@ -99,12 +99,12 @@ Route::controller(CustomerController::class)->group(function () {
     Route::get('/profile/{user}','index')->name('profile');
     Route::get('/profile/{user}/orders','orders')->name('orders');
     Route::get('/profile/{user}/orders/view/{id}', 'showOrder')->name('showOrder');
+    Route::get('/order/pdf/Order_{id}.pdf','createPDF')->name('orders.get.pdf'); //GET FOR PRIVATE PDFS
     Route::get('/profile/{user}/upload','upload')->name('upload');
     Route::put('/profile/{user}/editUser','updateUser')->name('updateUser');
     Route::put('/profile/{customer}/editCustomer','updateCustomer')->name('updateCustomer');
     Route::put('/profile/{user}/uploadImage','uploadImage')->name('uploadImage');
     Route::delete('/profile/{tshirt}/removeImage','removeImage')->name('removeImage');
-    Route::get('/cart/{id}/pdf', [CartController::class, 'createPDF']); //PRECISO MUDAR DE LOCAL
     Route::put('/profile/{customer}/editCustomerCheckout','updateCustomerCheckout')->name('updateCustomerCheckout');
     Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('checkout');
 });

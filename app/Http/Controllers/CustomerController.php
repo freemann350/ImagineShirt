@@ -14,6 +14,7 @@ use App\Models\Customer;
 use App\Models\User;
 use App\Http\Requests\CustomerRequest;
 use App\Http\Requests\UserRequest;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -75,6 +76,7 @@ class CustomerController extends Controller
             'date'=>$orderQuery->date,
             'status'=>$orderQuery->status,
             'total'=>$orderQuery->total_price,
+            'pdf'=>$orderQuery->receipt_url,
             'orderItems'=>$orderItemQuery
         ]);
     }
@@ -227,5 +229,14 @@ class CustomerController extends Controller
         return redirect()->route('checkout', Auth::user())
         ->with('alert-msg', $htmlMessage)
         ->with('alert-type','success');
+    }
+
+    public function createPDF($id) {
+        try {
+            $filename = Order::findOrFail($id);
+            return response()->download(storage_path("/app/pdf_receipts/$filename->receipt_url"), null, [], null);
+        } catch (\Exception $error) {
+            return back();
+        }
     }
 }

@@ -47,7 +47,9 @@ class HomeController extends Controller
     {
         $tshirt = Tshirt::findOrFail($id);
         
-        if (Auth::user() == NULL || (Auth::user()->id != $tshirt->customer_id) && $tshirt->category_id == NULL) 
+        Auth::user() == null ? $user = NULL : $user = Auth::user()->id;
+
+        if (( $user != $tshirt->customer_id) && $tshirt->category_id == NULL) 
             abort(404);
         $price = Price::all()->first();
         $color= Color::all();

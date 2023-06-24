@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 use Storage;
@@ -127,24 +128,7 @@ class OrderController extends Controller
             'nif'=>$orderQuery->nif,
             'id'=>$orderQuery->id,
             'date'=>$orderQuery->date,
-            'status'=>$orderQuery->status,
-            'total'=>$orderQuery->total_price,
-            'orderItems'=>$orderItemQuery
-        ]);
-    }
-
-    public function showOrderTable($id): View
-    {
-        $orderQuery = Order::findOrFail($id); 
-
-        $orderItemQuery = OrderItem::where('order_id',$id)->paginate(20); 
-
-        return view('management.receipt_table')->with([
-            'name'=>$orderQuery->user->name,
-            'address'=>$orderQuery->address,
-            'nif'=>$orderQuery->nif,
-            'id'=>$orderQuery->id,
-            'date'=>$orderQuery->date,
+            'pdf'=>$orderQuery->receipt_url,
             'status'=>$orderQuery->status,
             'total'=>$orderQuery->total_price,
             'orderItems'=>$orderItemQuery
@@ -157,7 +141,6 @@ class OrderController extends Controller
         $orderItemQuery = OrderItem::where('order_id',$order_id)->get();
         
         $user = User::findOrFail($user_id);
-
         $data= [
             'name'=>$orderQuery->user->name,
             'address'=>$orderQuery->address,
@@ -172,9 +155,16 @@ class OrderController extends Controller
         $pdf = Pdf::loadView('receipt_table',$data);
         
         $filename = "Order_$order_id.pdf";
+        
+        DB::transaction(function () use ($orderQuery,$filename) 
+        {
+            $orderQuery->receipt_url = $filename;
+            $orderQuery->save();
+        });
+
         $content = $pdf->download('pdf_file.pdf');
         Storage::put("pdf_receipts/$filename",$content) ;
-
+        
         $dataEmail["email"] = $user->email;
         $dataEmail["title"] = "Order #$order_id";
     
