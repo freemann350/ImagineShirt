@@ -20,24 +20,25 @@ class CustomerRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
+
     public function rules(): array
     {
-        if("'default_payment_type' => 'sometimes|in:VISA,MC'"){
-            return [
-                'nif' => 'sometimes|digits:9',
-                'address' => 'sometimes',
-                'default_payment_type' => 'sometimes',
-                'default_payment_ref' => 'sometimes|digits:16'
-            ];
+        $paymentType = $this->input('default_payment_type');
+
+        $rules = [
+            'nif' => 'nullable|digits:9',
+            'address' => 'nullable',
+            'default_payment_type' => 'nullable|in:VISA,MC,PAYPAL',
+            'default_payment_ref' => 'nullable'
+        ];
+
+        if ($paymentType === 'VISA' || $paymentType === 'MC') {
+            $rules['default_payment_ref'] .= '|digits:16';
+        } elseif ($paymentType === 'PAYPAL') {
+            $rules['default_payment_ref'] .= '|email';
         }
-        if("'default_payment_type' => 'sometimes|in:PAYPAL'"){
-            return [
-                'nif' => 'sometimes|digits:9',
-                'address' => 'sometimes',
-                'default_payment_type' => 'sometimes',
-                'default_payment_ref' => 'sometimes|email'
-            ];
-        }
+
+        return $rules;
     }
 
     public function messages(): array
