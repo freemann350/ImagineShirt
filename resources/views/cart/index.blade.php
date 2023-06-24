@@ -56,11 +56,7 @@
                             <h5 class="font-weight-bold">Total</h5>
                             <h5 class="font-weight-bold">{{ $total }}€</h5>
                         </div>
-                        <form method="post" action="{{ route('checkout', $cart) }}">
-                            @csrf
-                            @method('GET')
-                            <button type="submit" class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button>
-                        </form>
+                        <a href="{{ route('checkout', $cart) }}" class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</a>
                     </div>
                 </div>
             </div>

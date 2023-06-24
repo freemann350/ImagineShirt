@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Color;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -60,10 +61,25 @@ class CartController extends Controller
                 $tshirtSelf ? $priceItem = $price->unit_price_own : $priceItem = $price->unit_price_catalog;
                 $tshirtSelf ? $priceItemTotal = ($request->quantity*$price->unit_price_own)-$discount : $priceItemTotal = ($request->quantity*$price->unit_price_catalog)-$discount;
 
-                $cart[$cartKey] = [
+                /* $cart[$cartKey] = [
                     'tshirt_id' => $tshirt->id,
                     'tshirt_name' => $tshirt->name,
                     'tshirt_color' => $request->tshirt_color,
+                    'tshirt_size' => $request->tshirt_size,
+                    'tshirt_qty' => $request->quantity,
+                    'tshirt_self' => $tshirtSelf,
+                    'tshirt_discount' => $discount,
+                    'tshirt_price' => $priceItem,
+                    'tshirt_price_total' => $priceItemTotal
+                ]; */
+
+                $tshirt_color = Color::findOrFail('code', $request->tshirt_color);
+                
+                $cart[$cartKey] = [
+                    'tshirt_id' => $tshirt->id,
+                    'tshirt_name' => $tshirt->name,
+                    'tshirt_color_code' => $request->tshirt_color,
+                    'tshirt_color' => $tshirt_color->name,
                     'tshirt_size' => $request->tshirt_size,
                     'tshirt_qty' => $request->quantity,
                     'tshirt_self' => $tshirtSelf,
@@ -151,7 +167,13 @@ class CartController extends Controller
     {
         $cart = session('cart', []);
         $customer = Customer::find(Auth::user()->id);
-        
-        return view('cart.checkout', compact('cart', 'customer'));
+
+        $total = 0;
+
+        foreach ($cart as $item) {
+            $total += $item['tshirt_price_total'];
+        }
+
+        return view('cart.checkout', compact('cart', 'customer', 'total'));
     }
 }
