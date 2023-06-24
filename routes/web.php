@@ -23,15 +23,9 @@ use App\Http\Controllers\CartController;
 |
 */
 
-//GUEST ROUTES
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/cart', [App\Http\Controllers\HomeController::class, 'cart'])->name('cart');
-Route::get('/tshirts', [App\Http\Controllers\HomeController::class, 'catalog'])->name('catalog');
-Route::get('/tshirts/detail/{id}', [App\Http\Controllers\HomeController::class, 'show'])->name('detail');
-
-
 Route::controller(CartController::class)->group(function () {
     Route::get('/cart', 'show')->name('cart');
+    Route::get('/cart/checkout', 'checkout')->name('checkout');
     Route::post('/cart/add/{tshirt}', 'addToCart')->name('cart.add');
     Route::delete('/cart/{item}/remove', 'removeFromCart')->name('cart.remove');
     Route::post('/cart/store', 'store')->name('cart.store');
@@ -46,8 +40,6 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/tshirts','catalog')->name('catalog');
     Route::get('/tshirts/detail/{id}','show')->name('detail');
 });
-
-Route::view('/checkout','checkout');
 
 Route::middleware('employee')->group(function () {
     Route::get('/mgmt', [AdminController::class,'home'])->name('mgmt.home');
@@ -113,4 +105,6 @@ Route::controller(CustomerController::class)->group(function () {
     Route::put('/profile/{user}/uploadImage','uploadImage')->name('uploadImage');
     Route::delete('/profile/{tshirt}/removeImage','removeImage')->name('removeImage');
     Route::get('/cart/{id}/pdf', [CartController::class, 'createPDF']); //PRECISO MUDAR DE LOCAL
+    Route::put('/profile/{customer}/editCustomerCheckout','updateCustomerCheckout')->name('updateCustomerCheckout');
+    Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('checkout');
 });

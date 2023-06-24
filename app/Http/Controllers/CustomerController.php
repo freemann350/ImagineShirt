@@ -195,4 +195,37 @@ class CustomerController extends Controller
         ->with('alert-msg', $htmlMessage)
         ->with('alert-type','success');
     }
+
+    public function updateCustomerCheckout(CustomerRequest $request, Customer $customer): RedirectResponse
+    {
+        $formData = $request->validated();
+
+        $customer = DB::transaction(function () use ($formData, $customer) {
+            
+            if (isset($formData['nif'])) {
+                $customer->nif = $formData['nif'];
+            }
+
+            if (isset($formData['address'])) {
+                $customer->address = $formData['address'];
+            }
+
+            if (isset($formData['default_payment_type'])) {
+                $customer->default_payment_type = $formData['default_payment_type'];
+            }
+
+            if (isset($formData['default_payment_ref'])) {
+                $customer->default_payment_ref = $formData['default_payment_ref'];
+            }
+            
+            $customer->save();
+            return $customer;
+        });
+            
+        $htmlMessage = "Data successfully updated!";
+
+        return redirect()->route('checkout', Auth::user())
+        ->with('alert-msg', $htmlMessage)
+        ->with('alert-type','success');
+    }
 }

@@ -127,4 +127,12 @@ class CartController extends Controller
         $request->session()->forget('cart');
         return back();
     }
+
+    public function checkout(Request $request): View 
+    {
+        $cart = session('cart', []);
+        $customer = Customer::find(Auth::user()->id);
+        
+        return view('cart.checkout', compact('cart', 'customer'));
+    }
 }

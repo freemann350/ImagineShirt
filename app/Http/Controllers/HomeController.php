@@ -54,9 +54,4 @@ class HomeController extends Controller
 
         return view('tshirts.show',compact('tshirt','price','color'));
     }
-
-    public function cart(): View
-    {
-        return view('cart.index');
-    }
 }
