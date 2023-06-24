@@ -32,7 +32,6 @@ Route::get('/tshirts/detail/{id}', [App\Http\Controllers\HomeController::class, 
 
 Route::controller(CartController::class)->group(function () {
     Route::get('/cart', 'show')->name('cart');
-    Route::get('/cart', 'show')->name('cart');
     Route::post('/cart/add/{tshirt}', 'addToCart')->name('cart.add');
     Route::delete('/cart/{item}/remove', 'removeFromCart')->name('cart.remove');
     Route::post('/cart/store', 'store')->name('cart.store');
@@ -56,7 +55,6 @@ Route::middleware('employee')->group(function () {
     //ORDERS ROUTES
     Route::controller(OrderController::class)->group(function () {
         Route::get('/mgmt/pending-orders/', 'showPending')->name('orders.pending');
-        Route::get('/mgmt/order-history/', 'showHistory')->name('orders.history');
         Route::patch('/mgmt/orders/{order}/status','changeStatus')->name('orders.status.change');
         Route::get('/mgmt/order/view/{id}', 'show')->name('orders.show');
         Route::resource('/mgmt/order', OrderController::class);
@@ -65,6 +63,9 @@ Route::middleware('employee')->group(function () {
 
 //ADMINISTRATION ROUTES
 Route::middleware('admin')->group(function () {
+    //ORDER HISTORY (ADMIN SPECIFIC)
+    Route::get('/mgmt/order-history/', [OrderController::class,'showHistory'])->name('orders.history');
+
     Route::controller(AdminController::class)->group(function () {
         Route::get('/mgmt/statistics', 'statistic')->name('statistics');
         Route::patch('/mgmt/users/{user}/blocked','changeBlock')->name('users.blocked.change');

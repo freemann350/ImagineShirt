@@ -18,8 +18,8 @@ class AuthorizeEmployee
     {
         if (!($request->user()->user_type == 'A' || $request->user()->user_type == 'E')) {
             return $request->expectsJson()
-            ? abort(404, 'You are not an employee/administrator.')
-            : redirect()->route('profile', Auth::user())
+            ? abort(403, 'You are not an employee/administrator.')
+            : abort(404)
             ->with('alert-msg', 'You are not an employee/administrator.')
             ->with('alert-type', 'danger');
         }

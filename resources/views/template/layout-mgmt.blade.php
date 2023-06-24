@@ -72,7 +72,9 @@
                             <div class="collapse" id="collapseSales" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link {{ Route::currentRouteName() == 'orders.pending' ? 'active' : '' }}" href="{{ route('orders.pending') }}">Pending orders</a>
+                                    @can('view',\App\Models\User::class)
                                     <a class="nav-link {{ Route::currentRouteName() == 'orders.history' ? 'active' : '' }}" href="{{ route('orders.history') }}">Order history</a>
+                                    @endcan
                                 </nav>
                             </div>
                         </div>

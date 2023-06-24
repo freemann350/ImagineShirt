@@ -13,19 +13,22 @@
                     <div class="row">
                         <div class="mb-4">
                             <h4 class="font-weight-semi-bold mb-4">Carregue aqui a sua imagem</h4>
-                            <input name="name" class="form-control" type="text" placeholder="Nome da imagem">
+                            <input name="name" class="form-control @error('name') is-invalid @enderror" type="text" placeholder="Nome da imagem">
                             @error('name')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
                             @enderror
+                            <br>
                             <input name="description" class="form-control" type="text" placeholder="Descrição da imagem">
-                            <input name="photo" type="file" class="form-control">
+                            <br>
+                            <input name="photo" type="file" class="form-control @error('photo') is-invalid @enderror">
                             @error('photo')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
                             @enderror
+                            <br>
                         </div>
                     </div>
                     <div class="card-footer border-secondary bg-transparent">
@@ -58,12 +61,12 @@
                             <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                                 <h6 class="text-truncate mb-3">{{$tshirt->name}}</h6>
                                 <div class="d-flex justify-content-center">
-                                    <h6>$123.00</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                                    <a href="{{ route('detail',$tshirt->id) }}">
+                                    <h6><i class="fas fa-eye text-primary mr-1"></i>View detail</h6><h6 class="text-muted ml-2"></h6>
+                                    </a>
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between bg-light border">
-                                <a href="{{ route('detail',$tshirt->id)}}" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                                <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                                 <form method="POST" action="{{ route('removeImage', $tshirt) }}">
                                     @csrf
                                     @method('DELETE')

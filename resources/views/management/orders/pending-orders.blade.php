@@ -38,6 +38,7 @@
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
+                            <th>Status</th>
                             <th>Date</th>
                             <th>Name</th>
                             <th>Total</th>
@@ -47,6 +48,7 @@
                     <tbody>
                         @foreach ($orderPending as $order)
                         <tr>
+                            <td>{{$order->status}}</td>
                             <td>{{$order->date}}</td>
                             <td>{{$order->user->name}}</td>
                             <td>{{$order->total_price}}€</td>

@@ -18,7 +18,7 @@ class AuthorizeAdmin
         if (!($request->user()->user_type == 'A')) {
             return $request->expectsJson()
             ? abort(403, 'You are not an administrator.')
-            : redirect()->route('home')
+            : abort(404)
             ->with('alert-msg', 'You are not an administrator.')
             ->with('alert-type', 'danger');
         }

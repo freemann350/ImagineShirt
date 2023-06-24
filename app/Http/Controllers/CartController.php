@@ -19,6 +19,11 @@ use Illuminate\View\View;
 
 class CartController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->only('store');
+    }
+
     public function show(): View {
         $cart = session('cart', []);
         
@@ -29,25 +34,28 @@ class CartController extends Controller
 
     public function addToCart(Request $request, Tshirt $tshirt) : RedirectResponse 
     {
-        $cart = session('cart', []);
-        $cartKey = $tshirt->id . '' . $request->tshirt_color . '' . $request->tshirt_size;
-        
-        $tshirtSelf = $tshirt->category_id == NULL ?? 1;
+        if ($tshirt->customer_id == NULL && $tshirt->category_id != NULL) 
+        {
+            $cart = session('cart', []);
+            $cartKey = $tshirt->id . '' . $request->tshirt_color . '' . $request->tshirt_size;
+            
+            $tshirtSelf = $tshirt->category_id == NULL ?? 1;
 
-        if (array_key_exists($cartKey, $cart)) {
-            $cart[$cartKey]['tshirt_qty'] += $request->quantity;
-        } else {
-            $cart[$cartKey] = [
-                'tshirt_id' => $tshirt->id,
-                'tshirt_name' => $tshirt->name,
-                'tshirt_color' => $request->tshirt_color,
-                'tshirt_size' => $request->tshirt_size,
-                'tshirt_qty' => $request->quantity,
-                'tshirt_self' => $tshirtSelf,
-            ];
+            if (array_key_exists($cartKey, $cart)) {
+                $cart[$cartKey]['tshirt_qty'] += $request->quantity;
+            } else {
+                $cart[$cartKey] = [
+                    'tshirt_id' => $tshirt->id,
+                    'tshirt_name' => $tshirt->name,
+                    'tshirt_color' => $request->tshirt_color,
+                    'tshirt_size' => $request->tshirt_size,
+                    'tshirt_qty' => $request->quantity,
+                    'tshirt_self' => $tshirtSelf,
+                ];
+            }
+            
+            $request->session()->put('cart', $cart);
         }
-        
-        $request->session()->put('cart', $cart);
 
         return back();
     }
@@ -109,57 +117,14 @@ class CartController extends Controller
 
                 $newOrder->total_price = $total;
                 $newOrder->save();
-                $this->createSendPDF($newOrder->id,Auth::user());
             });
         }
-        return $this->destroyCart($request);
+        return $this->destroy($request);
     }
 
     public function destroy(Request $request): RedirectResponse
     {
         $request->session()->forget('cart');
         return back();
-    }
-
-    public function destroyCart(Request $request): RedirectResponse
-    { 
-        $request->session()->forget('cart');
-        return back();
-    }
-
-    public function createSendPDF($id, User $user) {
-        $orderQuery = Order::findOrFail($id);
-        $orderItemQuery = OrderItem::where('order_id',$id)->paginate(20);
-
-        $data= [
-            'name'=>$orderQuery->user->name,
-            'address'=>$orderQuery->address,
-            'nif'=>$orderQuery->nif,
-            'id'=>$orderQuery->id,
-            'date'=>$orderQuery->date,
-            'total'=>$orderQuery->total_price,
-            'orderItems'=>$orderItemQuery
-        ];
-        
-        view()->share('orderItem',$data);
-        $pdf = Pdf::loadView('receipt_table',$data);
-        
-        $filename = "Order_$id.pdf";
-        $content = $pdf->download('pdf_file.pdf');
-        Storage::put("pdf_receipts/$filename",$content) ;
-
-        $dataEmail["email"] = $user->email;
-        $dataEmail["title"] = "Order #$id";
-        $dataEmail["body"] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
-    
-        $file = storage_path("/app/pdf_receipts//$filename");
-        
-        Mail::send('mail-body', $data, function($message)use($dataEmail, $file) {
-            $message->to($dataEmail["email"])
-                ->subject($dataEmail["title"]);
-            $message->attach($file);
-        });
-
-        return;
     }
 }

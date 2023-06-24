@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 use Storage;
 
@@ -103,6 +104,7 @@ class OrderController extends Controller
 
         if ($order->status == 'paid') {
             $strMsg = ' is now paid!' ;
+            $this->createSendPDF($order->id,$order->customer_id);
         } elseif ($order->status == 'closed') {
             $strMsg = ' is now closed!' ;
         }
@@ -146,5 +148,42 @@ class OrderController extends Controller
             'total'=>$orderQuery->total_price,
             'orderItems'=>$orderItemQuery
         ]);
+    }
+
+    private function createSendPDF($order_id, $user_id) 
+    {
+        $orderQuery = Order::findOrFail($order_id);
+        $orderItemQuery = OrderItem::where('order_id',$order_id)->paginate(20);
+        $user = User::findOrFail($user_id);
+
+        $data= [
+            'name'=>$orderQuery->user->name,
+            'address'=>$orderQuery->address,
+            'nif'=>$orderQuery->nif,
+            'id'=>$orderQuery->id,
+            'date'=>$orderQuery->date,
+            'total'=>$orderQuery->total_price,
+            'orderItems'=>$orderItemQuery
+        ];
+        
+        view()->share('orderItem',$data);
+        $pdf = Pdf::loadView('receipt_table',$data);
+        
+        $filename = "Order_$order_id.pdf";
+        $content = $pdf->download('pdf_file.pdf');
+        Storage::put("pdf_receipts/$filename",$content) ;
+
+        $dataEmail["email"] = $user->email;
+        $dataEmail["title"] = "Order #$order_id";
+    
+        $file = storage_path("/app/pdf_receipts//$filename");
+        
+        Mail::send('mail-body', $data, function($message)use($dataEmail, $file) {
+            $message->to($dataEmail["email"])
+                ->subject($dataEmail["title"]);
+            $message->attach($file);
+        });
+
+        return;
     }
 }
