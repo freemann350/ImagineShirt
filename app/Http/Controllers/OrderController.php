@@ -154,7 +154,8 @@ class OrderController extends Controller
     private function createSendPDF($order_id, $user_id) 
     {
         $orderQuery = Order::findOrFail($order_id);
-        $orderItemQuery = OrderItem::where('order_id',$order_id);
+        $orderItemQuery = OrderItem::where('order_id',$order_id)->get();
+        
         $user = User::findOrFail($user_id);
 
         $data= [

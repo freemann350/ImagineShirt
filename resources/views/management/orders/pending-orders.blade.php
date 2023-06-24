@@ -9,6 +9,14 @@
             <li class="breadcrumb-item active">Pending orders</li>
         </ol>
 
+        @if (session('alert-msg'))
+        <div class="col">
+            <div class="card bg-{{session('alert-type')}} text-white mb-4 ">
+                <div class="card-body">{!! session('alert-msg') !!}</div>
+            </div>
+        </div> 
+        @endif
+
         @include('management.orders.shared.filtros',[
             'routeName' => "orders.pending",
             'filterByStatus' => old('status',$filterByStatus),
@@ -17,14 +25,6 @@
             'filterByDateEnd' => old('dateend',$filterByDateEnd),
             'filterByDateNIF' => old('nif',$filterByNIF)
         ])
-
-        @if (session('alert-msg'))
-        <div class="col">
-            <div class="card bg-{{session('alert-type')}} text-white mb-4 ">
-                <div class="card-body">{!! session('alert-msg') !!}</div>
-            </div>
-        </div> 
-        @endif
         
         <div class="card mb-4">
             <div class="card-header">
