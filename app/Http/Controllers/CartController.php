@@ -30,7 +30,9 @@ class CartController extends Controller
 
     public function addToCart(Request $request, Tshirt $tshirt) : RedirectResponse 
     {
-        if (($tshirt->customer_id == NULL && $tshirt->category_id != NULL) || $tshirt->customer_id == Auth::user()->id) 
+        Auth::user() != null ? $user = -1 : $user = Auth::user();
+
+        if (($tshirt->customer_id == NULL && $tshirt->category_id != NULL) || $tshirt->customer_id == $user) 
         {
             $cart = session('cart', []);
             $cartKey = $tshirt->id . '' . $request->tshirt_color . '' . $request->tshirt_size;

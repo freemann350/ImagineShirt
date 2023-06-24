@@ -46,8 +46,8 @@ class HomeController extends Controller
     public function show($id): View
     {
         $tshirt = Tshirt::findOrFail($id);
-
-        if (Auth::user() && Auth::user()->id != $tshirt->customer_id && $tshirt->customer_id != NULL) 
+        
+        if (Auth::user() == NULL || (Auth::user()->id != $tshirt->customer_id) && $tshirt->category_id == NULL) 
             abort(404);
         $price = Price::all()->first();
         $color= Color::all();

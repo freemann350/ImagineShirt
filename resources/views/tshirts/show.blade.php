@@ -42,7 +42,7 @@
                     <div class="d-flex mb-3">
                         <select class="custom-select" name="tshirt_color">
                             @foreach ($color as $color)
-                                <option value="{{$color->name}}">{{$color->name}}</option>
+                                <option value="{{$color->id}}">{{$color->name}}</option>
                             @endforeach
                         </select>
                     </div>
