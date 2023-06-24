@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CustomerDataRequest;
 use App\Http\Requests\TshirtUploadRequest;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Tshirt;
 use App\Models\Price;
 use App\Models\Category;
@@ -30,6 +31,7 @@ class CustomerController extends Controller
 
     public function index(User $user): View
     {
+        $user = Auth::user();
         $customer = Customer::find($user->id);
 
         if ($customer == NULL){
@@ -56,7 +58,25 @@ class CustomerController extends Controller
         $ordersQuery->where('customer_id',$user->id);
         $orders = $ordersQuery->paginate(20);
 
-        return view('customers.orders',compact('orders'));
+        return view('customers.orders',compact('orders','user'));
+    }
+
+    public function showOrder(User $user, $id): View
+    {
+        $orderQuery = Order::findOrFail($id); 
+
+        $orderItemQuery = OrderItem::where('order_id',$id)->paginate(20); 
+
+        return view('customers.order-details')->with([
+            'name'=>$orderQuery->user->name,
+            'address'=>$orderQuery->address,
+            'nif'=>$orderQuery->nif,
+            'id'=>$orderQuery->id,
+            'date'=>$orderQuery->date,
+            'status'=>$orderQuery->status,
+            'total'=>$orderQuery->total_price,
+            'orderItems'=>$orderItemQuery
+        ]);
     }
 
     public function upload(Request $request, User $user): View
@@ -99,11 +119,21 @@ class CustomerController extends Controller
         ->with('alert-type','success');
     }
 
+    public function removeImage(Tshirt $tshirt): RedirectResponse
+    {
+        $htmlMessage = "<strong>\"{$tshirt->name}\"</strong> has been deleted!"; 
+        $tshirt->delete();
+
+        return redirect()->route('upload', Auth::user()->id)
+        ->with('alert-msg', $htmlMessage)
+        ->with('alert-type','warning');
+    }
+
     public function updateUser(CustomerDataRequest $request, User $user): RedirectResponse
     {
         $formData = $request->validated();
 
-        $user = DB::transaction(function () use ($formData, $user) {
+        $user = DB::transaction(function () use ($formData, $user, $request) {
             $user->name = $formData['name'];
             $user->email = $formData['email'];
         
@@ -112,6 +142,17 @@ class CustomerController extends Controller
             }
             
             $user->save();
+
+            if ($request->hasFile('photo')) {
+                if ($user->photo_url) {
+                    Storage::delete('public/photos/' . $user->photo_url);
+                }
+                
+                $path = $request->photo->store('public/photos');
+                $user->photo_url = basename($path);
+                $user->save();
+            }
+
             return $user;
         });
             

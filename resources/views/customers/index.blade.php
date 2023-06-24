@@ -12,9 +12,26 @@
                     @method('PUT')
                     <input name="user_id" class="form-control" type="hidden" value="{{Auth::user()->id}}">
                     <div class="mb-4">
-                        <h4 class="font-weight-semi-bold mb-4">Nome</h4>
+                        <h4 class="font-weight-semi-bold mb-4">Dados pessoais</h4>
+                        <div class="col-md-4">
+                            <label>Imagem de perfil</label>
+                            <br>
+                            <img src="{{$user->photo_url != NULL ? $user->profilePhoto : asset('storage/default.jpg')}}" class="rounded-circle img-thumbnail">
+                            <br>
+                            <div class="row">
+                                <input type="file" class="form-control @error('photo') is-invalid @enderror"  name="photo">
+                                <br>
+                                @error('photo')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <br>
                         <div class="row">
                             <div class="col-md-6 form-group">
+                                <label>Nome</label>
                                 <input name="name" class="form-control @error('name') is-invalid @enderror" type="text" placeholder="João Pedro" value="{{Auth::user()->name}}">
                                 @error('name')
                                 <div class="invalid-feedback">
@@ -25,9 +42,9 @@
                         </div>
                     </div>
                     <div class="mb-4">
-                        <h4 class="font-weight-semi-bold mb-4">E-mail</h4>
                         <div class="row">
                             <div class="col-md-6 form-group">
+                                <label>E-mail</label>
                                 <input name="email" class="form-control @error('email') is-invalid @enderror" type="text" placeholder="exemplo@email.com" value="{{Auth::user()->email}}">
                                 @error('email')
                                 <div class="invalid-feedback">
@@ -38,9 +55,9 @@
                         </div>
                     </div>
                     <div class="mb-4">
-                        <h4 class="font-weight-semi-bold mb-4">Password</h4>
                         <div class="row">
                             <div class="col-md-6 form-group">
+                                <label>Password</label>
                                 <input name="password" class="form-control" type="password" placeholder="Nova password">
                             </div>
                         </div>

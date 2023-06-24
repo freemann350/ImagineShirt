@@ -4430,7 +4430,7 @@ input[type="button"].btn-block {
 }
 
 .card-footer {
-  padding: 0.75rem 1.25rem 5rem 0rem;
+  padding: 0rem 1.25rem 4rem 0rem;
   background-color: rgba(0, 0, 0, 0.03);
   border-top: 1px solid rgba(0, 0, 0, 0.125);
 }

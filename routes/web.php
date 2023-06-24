@@ -37,7 +37,6 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/tshirts','catalog')->name('catalog');
     Route::get('/tshirts/detail/{id}','show')->name('detail');
     Route::get('/cart', 'cart')->name('cart');
-
 });
 
 Route::view('/checkout','checkout');
@@ -97,9 +96,11 @@ Route::middleware('admin')->group(function () {
 Route::controller(CustomerController::class)->group(function () {
     Route::get('/profile/{user}','index')->name('profile');
     Route::get('/profile/{user}/orders','orders')->name('orders');
+    Route::get('/profile/{user}/orders/view/{id}', 'showOrder')->name('showOrder');
     Route::get('/profile/{user}/upload','upload')->name('upload');
     Route::put('/profile/{user}/editUser','updateUser')->name('updateUser');
     Route::put('/profile/{customer}/editCustomer','updateCustomer')->name('updateCustomer');
     Route::put('/profile/{user}/uploadImage','uploadImage')->name('uploadImage');
+    Route::delete('/profile/{tshirt}/removeImage','removeImage')->name('removeImage');
     Route::get('/mgmt/order/{id}/pdf', [OrderController::class, 'createPDF']); //PRECISO MUDAR DE LOCAL
 });
