@@ -60,18 +60,23 @@
                         <h5 class="font-weight-medium mb-3">Produtos</h5>
                         @foreach ($cart as $item)
                             <label>{{ $item['tshirt_name'] }} (x{{ $item['tshirt_qty'] }})</label>
-                            </tr>
+                            <br>
                         @endforeach
                     </div>
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2" style="margin-left: 0.6rem">
                             <h5 class="font-weight-bold">Total</h5>
-                            <h5 class="font-weight-bold">{{ $total }}€</h5>
+                            <h5 class="font-weight-bold">{{ $total }} €</h5>
                         </div>
-                        <form method="post" action="{{ route('cart.store', $cart) }}">
-                            @csrf
-                            <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" style="margin-left: 0.6rem">Place Order</button>
-                        </form>
+                        @if($customer->nif == NULL || $customer->default_payment_type == NULL || $customer->default_payment_ref == NULL)
+                            <br>
+                            <label>Por favor preencha os dados de envio</label>
+                        @elseif ($total != 0)
+                            <form method="post" action="{{ route('cart.store', $cart) }}">
+                                @csrf
+                                <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" style="margin-left: 0.6rem">Place Order</button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </div>

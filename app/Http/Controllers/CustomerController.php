@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CheckoutRequest;
 use App\Http\Requests\CustomerDataRequest;
 use App\Http\Requests\TshirtUploadRequest;
 use App\Models\Order;
@@ -196,27 +197,16 @@ class CustomerController extends Controller
         ->with('alert-type','success');
     }
 
-    public function updateCustomerCheckout(CustomerRequest $request, Customer $customer): RedirectResponse
+    public function updateCustomerCheckout(CheckoutRequest $request, Customer $customer): RedirectResponse
     {
         $formData = $request->validated();
 
         $customer = DB::transaction(function () use ($formData, $customer) {
             
-            if (isset($formData['nif'])) {
-                $customer->nif = $formData['nif'];
-            }
-
-            if (isset($formData['address'])) {
-                $customer->address = $formData['address'];
-            }
-
-            if (isset($formData['default_payment_type'])) {
-                $customer->default_payment_type = $formData['default_payment_type'];
-            }
-
-            if (isset($formData['default_payment_ref'])) {
-                $customer->default_payment_ref = $formData['default_payment_ref'];
-            }
+            $customer->nif = $formData['nif'];
+            $customer->address = $formData['address'];
+            $customer->default_payment_type = $formData['default_payment_type'];
+            $customer->default_payment_ref = $formData['default_payment_ref'];
             
             $customer->save();
             return $customer;
