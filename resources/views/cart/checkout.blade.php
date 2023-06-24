@@ -12,7 +12,7 @@
                     @method('PUT')
                     <div class="mb-4">                    
                         <h4 class="font-weight-semi-bold mb-4">Dados de envio</h4>
-                        <div class="row">
+                        <div class="row" style="margin-right: -10px;">
                             <div class="col-md-6 form-group">
                                 <label>Morada</label>
                                 <input name="address" class="form-control @error('email') is-invalid @enderror" type="text" placeholder="Rua 123 1234-567 Leiria" value="{{$customer->address}}">
