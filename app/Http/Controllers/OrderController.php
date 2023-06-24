@@ -107,6 +107,7 @@ class OrderController extends Controller
             $this->createSendPDF($order->id,$order->customer_id);
         } elseif ($order->status == 'closed') {
             $strMsg = ' is now closed!' ;
+            $this->sendClosed($order->id,$order->customer_id);
         }
         
         return back()
@@ -153,7 +154,7 @@ class OrderController extends Controller
     private function createSendPDF($order_id, $user_id) 
     {
         $orderQuery = Order::findOrFail($order_id);
-        $orderItemQuery = OrderItem::where('order_id',$order_id)->paginate(20);
+        $orderItemQuery = OrderItem::where('order_id',$order_id);
         $user = User::findOrFail($user_id);
 
         $data= [
@@ -178,12 +179,36 @@ class OrderController extends Controller
     
         $file = storage_path("/app/pdf_receipts//$filename");
         
-        Mail::send('mail-body', $data, function($message)use($dataEmail, $file) {
-            $message->to($dataEmail["email"])
-                ->subject($dataEmail["title"]);
+        Mail::send('mail-body', $data, function($message) use($dataEmail, $file) {
+            $message->to($dataEmail["email"])->subject($dataEmail["title"]);
             $message->attach($file);
         });
 
         return;
+    }
+
+    private function sendClosed($order_id, $user_id) 
+    {
+        $user = User::findOrFail($user_id);
+        $orderItemQuery = OrderItem::where('order_id',$order_id);
+        $orderQuery = Order::findOrFail($order_id);
+
+        $data= [
+            'name'=>$orderQuery->user->name,
+            'address'=>$orderQuery->address,
+            'nif'=>$orderQuery->nif,
+            'id'=>$orderQuery->id,
+            'date'=>$orderQuery->date,
+            'total'=>$orderQuery->total_price,
+            'orderItems'=>$orderItemQuery
+        ];
+
+
+        $dataEmail["email"] = $user->email;
+        $dataEmail["title"] = "Order #$order_id was closed";
+
+        Mail::send('mail-body-closed', $data, function($message) use($dataEmail) {
+            $message->to($dataEmail["email"])->subject($dataEmail["title"]);
+        });
     }
 }

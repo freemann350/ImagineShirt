@@ -7,14 +7,10 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Price;
 use App\Models\Tshirt;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class CartController extends Controller
@@ -34,16 +30,36 @@ class CartController extends Controller
 
     public function addToCart(Request $request, Tshirt $tshirt) : RedirectResponse 
     {
-        if ($tshirt->customer_id == NULL && $tshirt->category_id != NULL) 
+        if (($tshirt->customer_id == NULL && $tshirt->category_id != NULL) || $tshirt->customer_id == Auth::user()->id) 
         {
             $cart = session('cart', []);
             $cartKey = $tshirt->id . '' . $request->tshirt_color . '' . $request->tshirt_size;
             
             $tshirtSelf = $tshirt->category_id == NULL ?? 1;
-
+            
+            $price = Price::all()->first();
+            
             if (array_key_exists($cartKey, $cart)) {
                 $cart[$cartKey]['tshirt_qty'] += $request->quantity;
+                
+                $cart[$cartKey]['tshirt_qty'] >= $price->qty_discount ? $discount = 1 : $discount = 0;
+                
+                if($discount == 1)
+                    $tshirtSelf ? $discount = $price->unit_price_own_discount : $discount = $price->unit_price_catalog_discount;
+                
+                $tshirtSelf ? $priceItem = $price->unit_price_own : $priceItem = $price->unit_price_catalog;
+                $tshirtSelf ? $priceItemTotal = ($cart[$cartKey]['tshirt_qty'] *$price->unit_price_own)-$discount : $priceItemTotal = ($cart[$cartKey]['tshirt_qty'] *$price->unit_price_catalog)-$discount;
+                $cart[$cartKey]['tshirt_discount'] = $discount;
+                $cart[$cartKey]['tshirt_price'] = $priceItem;
+                $cart[$cartKey]['tshirt_price_total'] = $priceItemTotal;
             } else {
+                
+                $request->quantity >= $price->qty_discount ? $discount = 1 : $discount = 0;
+                if($discount == 1)
+                    $tshirtSelf ? $discount = $price->unit_price_own_discount : $discount = $price->unit_price_catalog_discount;
+                $tshirtSelf ? $priceItem = $price->unit_price_own : $priceItem = $price->unit_price_catalog;
+                $tshirtSelf ? $priceItemTotal = ($request->quantity*$price->unit_price_own)-$discount : $priceItemTotal = ($request->quantity*$price->unit_price_catalog)-$discount;
+
                 $cart[$cartKey] = [
                     'tshirt_id' => $tshirt->id,
                     'tshirt_name' => $tshirt->name,
@@ -51,6 +67,9 @@ class CartController extends Controller
                     'tshirt_size' => $request->tshirt_size,
                     'tshirt_qty' => $request->quantity,
                     'tshirt_self' => $tshirtSelf,
+                    'tshirt_discount' => $discount,
+                    'tshirt_price' => $priceItem,
+                    'tshirt_price_total' => $priceItemTotal
                 ];
             }
             
