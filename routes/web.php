@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,15 @@ Route::get('/cart', [App\Http\Controllers\HomeController::class, 'cart'])->name(
 Route::get('/tshirts', [App\Http\Controllers\HomeController::class, 'catalog'])->name('catalog');
 Route::get('/tshirts/detail/{id}', [App\Http\Controllers\HomeController::class, 'show'])->name('detail');
 
+
+Route::controller(CartController::class)->group(function () {
+    Route::get('/cart', 'show')->name('cart');
+    Route::get('/cart', 'show')->name('cart');
+    Route::post('/cart/add/{tshirt}', 'addToCart')->name('cart.add');
+    Route::delete('/cart/{item}/remove', 'removeFromCart')->name('cart.remove');
+    Route::post('/cart/store', 'store')->name('cart.store');
+});
+
 //AUTH ROUTES
 Auth::routes();
 
@@ -36,8 +46,6 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('/tshirts','catalog')->name('catalog');
     Route::get('/tshirts/detail/{id}','show')->name('detail');
-    Route::get('/cart', 'cart')->name('cart');
-
 });
 
 Route::view('/checkout','checkout');
@@ -101,5 +109,5 @@ Route::controller(CustomerController::class)->group(function () {
     Route::put('/profile/{user}/editUser','updateUser')->name('updateUser');
     Route::put('/profile/{customer}/editCustomer','updateCustomer')->name('updateCustomer');
     Route::put('/profile/{user}/uploadImage','uploadImage')->name('uploadImage');
-    Route::get('/mgmt/order/{id}/pdf', [OrderController::class, 'createPDF']); //PRECISO MUDAR DE LOCAL
+    Route::get('/cart/{id}/pdf', [CartController::class, 'createPDF']); //PRECISO MUDAR DE LOCAL
 });

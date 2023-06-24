@@ -11,6 +11,7 @@ class OrderItem extends Model
     use HasFactory;
 
     protected $table = 'order_items';
+    public $timestamps = false;
 
     public function order(): BelongsTo
     {
