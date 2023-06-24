@@ -78,7 +78,7 @@
                     </tfoot>
                     </table>
                     <button onclick="history.back()" class="btn btn-primary">Go back</button>
-                    @if ($pdf != null && $status != 'pending')
+                    @if ($pdf != null && $status != 'pending' && Auth::user()->user_type == 'A')
                         <a href="{{ route('orders.get.pdf',$id) }}"><button class="btn btn-primary">Ver recibo</button></a>
                     @endif
                 </div>

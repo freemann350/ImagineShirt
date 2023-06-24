@@ -14,12 +14,12 @@
                 Change my password
             </div>
             <div class="card-body">
-            <form method="POST" action="{{ route('staff.password.change',$user) }}">
+            <form method="POST" action="{{ route('staff.password.change',Auth::user()) }}">
                 @csrf
                 @method('PATCH')
                 <div class="row">
                     <div class="col">
-                        <label>{{$user->name}}</label>
+                        <label>Name</label>
                         <input type="password" class="form-control" placeholder="Password" name="password">
                     </div>
                 </div>
