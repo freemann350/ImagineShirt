@@ -41,8 +41,8 @@
                     <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
                     <div class="d-flex mb-3">
                         <select class="custom-select" name="tshirt_color">
-                            @foreach ($color as $color)
-                                <option value="{{$color->id}}">{{$color->name}}</option>
+                        @foreach ($color as $color)
+                                <option value="{{ $color->code }}">{{$color->name}}</option>
                             @endforeach
                         </select>
                     </div>

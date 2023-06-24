@@ -63,19 +63,7 @@ class CartController extends Controller
                 $tshirtSelf ? $priceItem = $price->unit_price_own : $priceItem = $price->unit_price_catalog;
                 $tshirtSelf ? $priceItemTotal = ($request->quantity*$price->unit_price_own)-$discount : $priceItemTotal = ($request->quantity*$price->unit_price_catalog)-$discount;
 
-                /* $cart[$cartKey] = [
-                    'tshirt_id' => $tshirt->id,
-                    'tshirt_name' => $tshirt->name,
-                    'tshirt_color' => $request->tshirt_color,
-                    'tshirt_size' => $request->tshirt_size,
-                    'tshirt_qty' => $request->quantity,
-                    'tshirt_self' => $tshirtSelf,
-                    'tshirt_discount' => $discount,
-                    'tshirt_price' => $priceItem,
-                    'tshirt_price_total' => $priceItemTotal
-                ]; */
-
-                $tshirt_color = Color::findOrFail('code', $request->tshirt_color);
+                $tshirt_color = Color::findOrFail($request->tshirt_color);
                 
                 $cart[$cartKey] = [
                     'tshirt_id' => $tshirt->id,
@@ -140,7 +128,7 @@ class CartController extends Controller
                     $newOrderItem = new OrderItem();
                     $newOrderItem->order_id = $newOrder->id;
                     $newOrderItem->tshirt_image_id = $cart['tshirt_id'];
-                    $newOrderItem->color_code = $cart['tshirt_color'];
+                    $newOrderItem->color_code = $cart['tshirt_color_code'];
                     $newOrderItem->size = $cart['tshirt_size'];
                     $newOrderItem->qty = $cart['tshirt_qty'];
                     $newOrderItem->unit_price = $price->unit_price_catalog;

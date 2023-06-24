@@ -39,7 +39,7 @@
                                 </form>
                             </td>
                             @php
-                                $total+=$item['tshirt_price_total'] ;
+                                $total+=$item['tshirt_price_total'];
                             @endphp
                         </tr>
                         @endforeach
