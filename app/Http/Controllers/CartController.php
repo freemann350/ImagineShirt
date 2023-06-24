@@ -156,22 +156,28 @@ class CartController extends Controller
     {
         
         $cart = session('cart', []);
-        $customer = Customer::find(Auth::user()->id);
         
-        if ($customer == NULL) 
-        {
-            $customer = DB::transaction(function () use ($customer) {
-                $customer = new Customer();
-                $customer->id = Auth::user()->id;
-                $customer->save();
-                return $customer;
-            });
-        }
+        try{
+            $customer = Customer::find(Auth::user()->id);
 
-        $total = 0;
+            if ($customer == NULL) 
+            {   
+                $customer = DB::transaction(function () use ($customer) {
+                    $customer = new Customer();
+                    $customer->id = Auth::user()->id;
+                    $customer->save();
+                    return $customer;
+                });
+            }
 
-        foreach ($cart as $item) {
-            $total += $item['tshirt_price_total'];
+            $total = 0;
+
+            foreach ($cart as $item) {
+                $total += $item['tshirt_price_total'];
+            }
+
+        }catch (\Exception $error) {
+            return view('auth.login');
         }
 
         return view('cart.checkout', compact('cart', 'customer', 'total'));

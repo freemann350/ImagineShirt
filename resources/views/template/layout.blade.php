@@ -32,7 +32,7 @@
     <!-- Topbar Start -->
     <div class="container-fluid">
         <a class="logo" id="logo" href="{{ route('home') }}">
-            <img src="/img/logo.png" alt="imagineshirt logo">
+            <img src="/img/logo.png" alt="imagineshirt logo" style="max-width: 30%; height: auto; margin-bottom: 10px; margin-top: 10px;">
         </a>
     </div>
     <!-- Topbar End -->
