@@ -233,10 +233,12 @@ class CustomerController extends Controller
 
     public function createPDF($id) {
         try {
-            $filename = Order::findOrFail($id);
-            return response()->download(storage_path("/app/pdf_receipts/$filename->receipt_url"), null, [], null);
+            $order = Order::findOrFail($id);
+            if (Auth::user()->user_type == 'A' || Auth::user()->id == $order->customer_id) 
+                return response()->download(storage_path("/app/pdf_receipts/$order->receipt_url"), null, [], null);
         } catch (\Exception $error) {
-            return back();
+            abort(404);
         }
+        abort(404);
     }
 }
