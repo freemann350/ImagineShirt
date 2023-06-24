@@ -3,7 +3,7 @@
 @section('main')
 <main>
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Welcome, user</h1>
+        <h1 class="mt-4">Welcome, {{Auth::user()->name}}</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item active">Main page</li>
         </ol>

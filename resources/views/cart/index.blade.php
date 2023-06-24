@@ -7,14 +7,17 @@
     <!-- Cart Start -->
     <div class="container-fluid pt-5">
         <div class="row px-xl-5">
-            <div class="col-lg-8 table-responsive mb-5">
+            <div class="col-lg-12 table-responsive mb-5">
                 <table class="table table-bordered text-center mb-0">
                     <thead class="bg-secondary text-dark">
                         <tr>
-                            <th>Products</th>
-                            <th>Price</th>
+                            <th>Product name</th>
+                            <th>Size</th>
+                            <th>Color</th>
                             <th>Quantity</th>
-                            <th>Total</th>
+                            <th>Unit price</th>
+                            <th>Discount</th>
+                            <th>Total product</th>
                             <th>Remove</th>
                         </tr>
                     </thead>
@@ -25,8 +28,10 @@
                             <td class="align-middle">{{ $item['tshirt_size'] }}</td>
                             <td class="align-middle">{{ $item['tshirt_color']}}</td>
                             <td class="align-middle">{{ $item['tshirt_qty'] }}</td>
+                            <td class="align-middle">{{ $item['tshirt_price'] }}</td>
+                            <td class="align-middle">{{ $item['tshirt_discount']  }} $</td>
+                            <td class="align-middle">{{ $item['tshirt_price_total'] }} $</td>
                             <td class="align-middle">
-                            
                                 <form method="post" action="{{ route('cart.remove',$item['tshirt_id'] ."" . $item['tshirt_color'] . "" . $item['tshirt_size']) }}">
                                     @csrf
                                     @method('DELETE')
@@ -34,7 +39,7 @@
                                 </form>
                             </td>
                             @php
-                                $item['tshirt_self'] ? $total+=$item['tshirt_qty']*$price->unit_price_own : $total+=$item['tshirt_qty']*$price->unit_price_catalog;
+                                $total+=$item['tshirt_price_total'] ;
                             @endphp
                         </tr>
                         @endforeach
