@@ -4,16 +4,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PasswordRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class UserController extends Controller
 {
   public function changePasswordStaff() : View
   {
-    $user = User::all()->first();
-    return view('management.changepassword',compact('user'));
+    return view('management.changepassword');
   }
 
   public function update(PasswordRequest $request, User $user) : RedirectResponse
