@@ -31,9 +31,9 @@ class CartController extends Controller
 
     public function addToCart(Request $request, Tshirt $tshirt) : RedirectResponse 
     {
-        Auth::user() != null ? $user = -1 : $user = Auth::user();
+        Auth::user() == null ? $user = -1 : $user = Auth::user()->id;
 
-        if (($tshirt->customer_id == NULL && $tshirt->category_id != NULL) || $tshirt->customer_id == $user) 
+        if ($tshirt->customer_id == $user || ($tshirt->customer_id == NULL && $tshirt->category_id != NULL)) 
         {
             $cart = session('cart', []);
             $cartKey = $tshirt->id . '' . $request->tshirt_color . '' . $request->tshirt_size;
@@ -88,7 +88,6 @@ class CartController extends Controller
     public function removeFromCart(Request $request,$item): RedirectResponse
     {
         $cart = session('cart', []);
-        
         if (array_key_exists($item, $cart)) {
             unset($cart[$item]);
         }
@@ -133,7 +132,7 @@ class CartController extends Controller
                     $newOrderItem->qty = $cart['tshirt_qty'];
                     $newOrderItem->unit_price = $price->unit_price_catalog;
 
-                    $newOrderItem->sub_total = (float) $price->unit_price_catalog * (int) $cart['tshirt_qty'];
+                    $newOrderItem->sub_total = $cart['tshirt_price_total'];
                     
                     $total += $newOrderItem->sub_total;
                     
@@ -155,8 +154,19 @@ class CartController extends Controller
 
     public function checkout(Request $request): View 
     {
+        
         $cart = session('cart', []);
         $customer = Customer::find(Auth::user()->id);
+        
+        if ($customer == NULL) 
+        {
+            $customer = DB::transaction(function () use ($customer) {
+                $customer = new Customer();
+                $customer->id = Auth::user()->id;
+                $customer->save();
+                return $customer;
+            });
+        }
 
         $total = 0;
 

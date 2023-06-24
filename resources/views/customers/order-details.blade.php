@@ -73,6 +73,9 @@
                     </tfoot>
                     </table>
                     <button onclick="history.back()" class="btn btn-primary">Voltar atrás</button>
+                    @if ($pdf != null && $status != 'pending')
+                        <a href="{{ route('orders.get.pdf',$id) }}"><button class="btn btn-primary">Ver recibo</button></a>
+                    @endif
                 </div>
             </div>
         </div>

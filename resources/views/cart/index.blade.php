@@ -32,7 +32,7 @@
                             <td class="align-middle">{{ $item['tshirt_discount']  }} €</td>
                             <td class="align-middle">{{ $item['tshirt_price_total'] }} €</td>
                             <td class="align-middle">
-                                <form method="post" action="{{ route('cart.remove',$item['tshirt_id'] ."" . $item['tshirt_color'] . "" . $item['tshirt_size']) }}">
+                                <form method="post" action="{{ route('cart.remove',$item['tshirt_id'] ."" . $item['tshirt_color_code'] . "" . $item['tshirt_size']) }}">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button>

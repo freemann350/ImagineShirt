@@ -5,7 +5,7 @@
         <h1 class="mt-4">View order data</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item">Administration</li>
-            <li class="breadcrumb-item">Users</li>
+            <li class="breadcrumb-item">Order</li>
             <li class="breadcrumb-item active">View</li>
         </ol>
         <div class="card mb-4">
@@ -78,6 +78,9 @@
                     </tfoot>
                     </table>
                     <button onclick="history.back()" class="btn btn-primary">Go back</button>
+                    @if ($pdf != null && $status != 'pending')
+                        <a href="{{ route('orders.get.pdf',$id) }}"><button class="btn btn-primary">Ver recibo</button></a>
+                    @endif
                 </div>
             </div>
         </div>

@@ -32,10 +32,10 @@
                         @csrf
                         <select class="custom-select" name="tshirt_size">
                             <option value="XS">Extra small</option>
-                            <option value="XS">Small</option>
-                            <option value="XS">Medium</option>
-                            <option value="XS">Large</option>
-                            <option value="XS">Extra large</option>
+                            <option value="S">Small</option>
+                            <option value="M">Medium</option>
+                            <option value="L">Large</option>
+                            <option value="XL">Extra large</option>
                         </select>
                     </div>
                     <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
