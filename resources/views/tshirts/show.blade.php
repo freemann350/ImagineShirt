@@ -4,14 +4,13 @@
 
 @section('content')
     <!-- Shop Detail Start -->
-
     <div class="container-fluid py-5">
         <div class="row px-xl-5">
             <div class="col-lg-4 pb-5">
                 <div id="product-carousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner border">
                         <div class="carousel-item active">
-                            <img class="w-100 h-100" src="{{ asset('storage/tshirt_images/'.$tshirt->image_url) }}" alt="Image">
+                            <img class="w-100 h-100" src="{{ $tshirt->category != NULL ? $tshirt->fullTshirtImageUrl : route('tshirts.get.image',$tshirt->image_url) }}" alt="{{$tshirt->name}}">
                         </div>
                     </div>
                     <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
@@ -26,59 +25,35 @@
             <div class="col-lg-7 pb-5">
                 <h3 class="font-weight-semi-bold">{{$tshirt->name}}</h3>
                 <h3 class="font-weight-semi-bold mb-4">{{$price->unit_price_catalog}}€</h3>
-                <p class="mb-4">{{$category}}</p>
-                <div class="d-flex mb-3">
+                <p class="mb-4">{{$tshirt->category_id == NULL ? 'Imagem privada' : $tshirt->category->name}}</p>
+                <form method="POST" action="{{ route('cart.add', $tshirt) }}">
                     <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
-                    <form>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-1" name="size">
-                            <label class="custom-control-label" for="size-1">XS</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-2" name="size">
-                            <label class="custom-control-label" for="size-2">S</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-3" name="size">
-                            <label class="custom-control-label" for="size-3">M</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-4" name="size">
-                            <label class="custom-control-label" for="size-4">L</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-5" name="size">
-                            <label class="custom-control-label" for="size-5">XL</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="d-flex mb-4">
+                    <div class="d-flex mb-3">
+                        @csrf
+                        <select class="custom-select" name="tshirt_size">
+                            <option value="XS">Extra small</option>
+                            <option value="XS">Small</option>
+                            <option value="XS">Medium</option>
+                            <option value="XS">Large</option>
+                            <option value="XS">Extra large</option>
+                        </select>
+                    </div>
                     <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
-                    <form>
-                        <select class="custom-select">
-                            <option selected hidden>Choose a color...</option>
-                            @foreach ($colors as $color)
-                            <option value="{{$color->code}}">{{$color->name}}</option>
+                    <div class="d-flex mb-3">
+                        <select class="custom-select" name="tshirt_color">
+                            @foreach ($color as $color)
+                                <option value="{{$color->code}}">{{$color->name}}</option>
                             @endforeach
                         </select>
-                    </form>
-                </div>
-                <div class="d-flex align-items-center mb-4 pt-2">
-                    <div class="input-group quantity mr-3" style="width: 130px;">
-                        <div class="input-group-btn">
-                            <button class="btn btn-primary btn-minus" >
-                            <i class="fa fa-minus"></i>
-                            </button>
-                        </div>
-                        <input type="text" class="form-control bg-secondary text-center" value="1">
-                        <div class="input-group-btn">
-                            <button class="btn btn-primary btn-plus">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
                     </div>
-                    <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
-                </div>
+                    <p class="text-dark font-weight-medium mb-0 mr-3">Quantity:</p>
+                    <div class="d-flex mb-3">
+                        <div class="input-group quantity mr-3" style="width: 130px;">
+                            <input type="text" class="form-control bg-secondary text-center" name="quantity" value="1">
+                        </div>
+                        <button  type="submit" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="row px-xl-5">
